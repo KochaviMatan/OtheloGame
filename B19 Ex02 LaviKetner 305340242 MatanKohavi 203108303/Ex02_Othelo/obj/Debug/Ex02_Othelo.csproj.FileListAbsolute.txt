@@ -1,0 +1,22 @@
+C:\B19 Ex02 LaviKetner 305340242 MatanKohavi 203108303\Ex02_Othelo\obj\Debug\Ex02_Othelo.csprojAssemblyReference.cache
+C:\B19 Ex02 LaviKetner 305340242 MatanKohavi 203108303\Ex02_Othelo\obj\Debug\Ex02_Othelo.csproj.CoreCompileInputs.cache
+C:\B19 Ex02 LaviKetner 305340242 MatanKohavi 203108303\Ex02_Othelo\bin\Debug\Ex02_Othelo.exe.config
+C:\B19 Ex02 LaviKetner 305340242 MatanKohavi 203108303\Ex02_Othelo\bin\Debug\Ex02_Othelo.exe
+C:\B19 Ex02 LaviKetner 305340242 MatanKohavi 203108303\Ex02_Othelo\bin\Debug\Ex02_Othelo.pdb
+C:\B19 Ex02 LaviKetner 305340242 MatanKohavi 203108303\Ex02_Othelo\obj\Debug\Ex02_Othelo.csproj.CopyComplete
+C:\B19 Ex02 LaviKetner 305340242 MatanKohavi 203108303\Ex02_Othelo\obj\Debug\Ex02_Othelo.exe
+C:\B19 Ex02 LaviKetner 305340242 MatanKohavi 203108303\Ex02_Othelo\obj\Debug\Ex02_Othelo.pdb
+C:\Users\Matan Kochavi\Documents\OtheloGame\Ex02_Othelo\obj\Debug\Ex02_Othelo.csprojResolveAssemblyReference.cache
+C:\Users\Matan Kochavi\Documents\OtheloGame\Ex02_Othelo\obj\Debug\Ex02_Othelo.exe
+C:\Users\Matan Kochavi\Documents\OtheloGame\Ex02_Othelo\obj\Debug\Ex02_Othelo.pdb
+C:\Users\Matan Kochavi\Documents\OtheloGame\Ex02_Othelo\bin\Debug\Ex02_Othelo.exe.config
+C:\Users\Matan Kochavi\Documents\OtheloGame\Ex02_Othelo\bin\Debug\Ex02_Othelo.exe
+C:\Users\Matan Kochavi\Documents\OtheloGame\Ex02_Othelo\bin\Debug\Ex02_Othelo.pdb
+C:\Users\Matan\Documents\OtheloGame\Ex02_Othelo\bin\Debug\Ex02_Othelo.exe.config
+C:\Users\Matan\Documents\OtheloGame\Ex02_Othelo\bin\Debug\Ex02_Othelo.exe
+C:\Users\Matan\Documents\OtheloGame\Ex02_Othelo\bin\Debug\Ex02_Othelo.pdb
+C:\Users\Matan\Documents\OtheloGame\Ex02_Othelo\bin\Debug\Ex02.ConsoleUtils.dll
+C:\Users\Matan\Documents\OtheloGame\Ex02_Othelo\obj\Debug\Ex02_Othelo.csprojResolveAssemblyReference.cache
+C:\Users\Matan\Documents\OtheloGame\Ex02_Othelo\obj\Debug\Ex02_Othelo.csproj.CoreCompileInputs.cache
+C:\Users\Matan\Documents\OtheloGame\Ex02_Othelo\obj\Debug\Ex02_Othelo.exe
+C:\Users\Matan\Documents\OtheloGame\Ex02_Othelo\obj\Debug\Ex02_Othelo.pdb
