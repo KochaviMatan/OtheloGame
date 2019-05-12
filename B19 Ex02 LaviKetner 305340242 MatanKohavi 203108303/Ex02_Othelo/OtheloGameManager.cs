@@ -31,13 +31,13 @@ namespace Ex02_Othelo
         //                                   Data Members                                       //
         //--------------------------------------------------------------------------------------//
 
-        private static GamePanel    s_GamePanel;
-        private Player              m_Player1;
-        private Player              m_Player2;
-        private static Player.eTeam s_Turn              = Player.eTeam.Black;
-        private Player              m_Winner            = null;
-        private List<Piece>[,] m_ChangeTeamPieces;
-        //private List<List<Piece>> m_ChangeTeamPieces = new List<List<Piece>>();
+        private static GamePanel        s_GamePanel;
+        private Player                  m_Player1;
+        private Player                  m_Player2;
+        private static Player.eTeam     s_Turn             = Player.eTeam.Black;
+        private Player                  m_Winner           = null;
+        List<Piece>[,] m_ChangeTeamPieces;
+
 
         //--------------------------------------------------------------------------------------//
         //                                  Run Game                                            //
@@ -51,6 +51,7 @@ namespace Ex02_Othelo
             s_GamePanel = new GamePanel(i_BoardSize);
             m_Player1 = new Player(i_Player1Name, v_Player1IsAlwaysNotComputer, Player.eTeam.Black);
             m_Player2 = new Player(i_Player2Name, i_IsPlayer2IsComputer, Player.eTeam.White);
+            initializeChangeTeamPiecesMember();
         }
         
         //
@@ -122,6 +123,19 @@ namespace Ex02_Othelo
             s_GamePanel[i_fourInitializeCoordinates[k_LeftDownBlack]] = i_fourInitializePieces[k_LeftDownBlack];
         }
 
+        private void initializeChangeTeamPiecesMember()
+        {
+            m_ChangeTeamPieces = new List<Piece>[s_GamePanel.r_Size, s_GamePanel.r_Size];
+
+            for (int i = 0; i < s_GamePanel.r_Size; i++) 
+            {
+                for (int j = 0; j < s_GamePanel.r_Size; j++) 
+                {
+                    m_ChangeTeamPieces[i, j] = new List<Piece>();
+                }
+            }
+        }
+
         //--------------------------------------------------------------------------------------//
         //                                   Movment Function                                   //
         //--------------------------------------------------------------------------------------//
@@ -181,8 +195,7 @@ namespace Ex02_Othelo
         {
             foreach (Piece RivalPiece in i_CurrentListOfsequencePieces)
             {
-                m_ChangeTeamPieces[i_CurrentCoordinate.X, i_CurrentCoordinate.Y].Add(RivalPiece);
-                //m_ChangeTeamPieces[i_CurrentCoordinate.X][i_CurrentCoordinate.Y].add(RivalPiece);
+                m_ChangeTeamPieces[i_CurrentCoordinate.X,i_CurrentCoordinate.Y].Add(RivalPiece);
             }
         }
 
@@ -322,13 +335,13 @@ namespace Ex02_Othelo
             // This indexer returns the piece in the index of the given coordinate.
             get
             {
-                return m_ChangeTeamPieces[i_Cell.Y, i_Cell.X];
+                return m_ChangeTeamPieces[i_Cell.Y,i_Cell.X];
             }
 
             // This indexer enter the given piece at the place of the board that the coordinate represent.
             set
             {
-                m_ChangeTeamPieces[i_Cell.Y, i_Cell.X] = value;
+                m_ChangeTeamPieces[i_Cell.Y,i_Cell.X] = value;
             }
         }
 
@@ -408,7 +421,7 @@ namespace Ex02_Othelo
             Piece newPiece = new Piece(s_Turn, i_Coordinate);
             s_GamePanel[i_Coordinate] = newPiece;
 
-            foreach ( Piece currentPieceToFlip in m_ChangeTeamPieces[i_Coordinate.X, i_Coordinate.Y])
+            foreach (Piece currentPieceToFlip in m_ChangeTeamPieces[i_Coordinate.X,i_Coordinate.Y])
             {
                 currentPieceToFlip.changePieceTeam();
             }
@@ -418,7 +431,7 @@ namespace Ex02_Othelo
 
         public bool setPlaceValidation(Coordinates i_CurrentCoordinate)
         {
-            return (m_ChangeTeamPieces[i_CurrentCoordinate.X, i_CurrentCoordinate.Y] != null);
+            return (m_ChangeTeamPieces[i_CurrentCoordinate.X,i_CurrentCoordinate.Y] != null);
         }        
 
         //
