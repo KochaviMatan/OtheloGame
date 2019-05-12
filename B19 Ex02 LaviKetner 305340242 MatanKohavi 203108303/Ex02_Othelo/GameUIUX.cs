@@ -94,7 +94,7 @@ namespace Ex02_Othelo
                 else
                 {
                     // Getting valid str action.
-                    m_CurrentPlayerInput = getValidActionFromThePlayer(); 
+                     
                     doAMoveOrQuit();
                 }
 
@@ -115,22 +115,14 @@ namespace Ex02_Othelo
             
         }
 
-        //NEED TO FILL
-        private void doPlayerMove()
-        {
-            Coordinates Coordinate;
-
-            convertStrToMove(m_CurrentPlayerInput, out Coordinate);
-
-            m_OtheloGameManager.setPiece(Coordinate);
-
-            m_OtheloGameManager.ChangeTurn();
-            clearScreenAndPrintTheActionThatRivalDone();
-        }
 
         //NEED TO FILL
         private void doAMoveOrQuit()
         {
+            Coordinates Coordinate;
+            m_CurrentPlayerInput = getValidActionFromThePlayer();
+            convertStrToMove(m_CurrentPlayerInput, out Coordinate);
+
             if (isQuitSyntex(m_CurrentPlayerInput))
             {
                 m_OtheloGameManager.Winner = m_OtheloGameManager.GetOpposingPlayer();
@@ -138,9 +130,22 @@ namespace Ex02_Othelo
             }
             else
             {
-                doPlayerMove();
+                doPlayerMove(Coordinate);
             }
         }
+
+        //NEED TO FILL
+        private void doPlayerMove(Coordinates i_Coordinate)
+        {
+            if(!m_OtheloGameManager.setPiece(i_Coordinate))
+            {
+                doAMoveOrQuit();
+            }
+
+            m_OtheloGameManager.ChangeTurn();
+            clearScreenAndPrintTheActionThatRivalDone();
+        }
+
 
         //NEED TO FILL
         private void currentGameRoundIsOver()
@@ -280,7 +285,7 @@ namespace Ex02_Othelo
             Console.WriteLine("Player{0} Please Enter your name: ", i_Player);
             string userName = Console.ReadLine();
 
-            while (!isValidName(userName )&&  m_ChangeTeamPieces[Coordinate] != null)
+            while (!isValidName(userName))
 
             {
                 printErrorMsgForGettingInvalidName();
@@ -349,10 +354,13 @@ namespace Ex02_Othelo
         //
         private string getValidActionFromThePlayer()
         {
+            Coordinates Coordinate;
             printPlayersTurnMsg();
             string playerAction = Console.ReadLine();
 
-            while (!isValidSyntexAndAction(playerAction) && m_ChangeTeamPieces[Coordinate] != null)
+            convertStrToMove(m_CurrentPlayerInput, out Coordinate);
+
+            while (!isValidSyntexAndAction(playerAction))
             {
                 printErrorMsgForGettingInvalidAction();
                 printPlayersTurnMsg();

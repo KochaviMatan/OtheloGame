@@ -38,13 +38,6 @@ namespace Ex02_Othelo
         private Player              m_Winner            = null;
         private List<Piece>[,]      m_ChangeTeamPieces;
 
-
-        
-
-
-
-        
-
         //--------------------------------------------------------------------------------------//
         //                                  Run Game                                            //
         //--------------------------------------------------------------------------------------//
@@ -67,7 +60,7 @@ namespace Ex02_Othelo
             initializeStartPositionOfPiecesOnBoard();
             m_Winner = null;
             s_Turn = Player.eTeam.Black;
-           // buildCurrentValidMovesList();
+            makeAListOfCurrectMoves();
         }
 
         //Place the first 4 pieces.
@@ -128,19 +121,15 @@ namespace Ex02_Othelo
             s_GamePanel[i_fourInitializeCoordinates[k_LeftDownBlack]] = i_fourInitializePieces[k_LeftDownBlack];
         }
 
-        // Builds a list of current players available moves:
-        private void buildCurrentValidMovesList()
-        {
-
-        }
-
         //--------------------------------------------------------------------------------------//
         //                                   Movment Function                                   //
         //--------------------------------------------------------------------------------------//
 
-        private void makeAListOfCurrectMoves(Player i_CurrentPlayrTurn)
+
+        private void makeAListOfCurrectMoves()
         {
-            List<Piece> allThePiecesFormCurrentPlayer = i_CurrentPlayrTurn.Pieces;
+            
+            List<Piece> allThePiecesFormCurrentPlayer = GetCurrentPlayer().Pieces;
 
             foreach (Piece currentPiece in allThePiecesFormCurrentPlayer)
             {
@@ -275,6 +264,7 @@ namespace Ex02_Othelo
         }
 
 
+
         //-------------------   Move Coordinate to each Direction function   -------------------
 
         private void moveCoordinateTopRightDirection(ref Coordinates io_NextCoordinateInDirection, Coordinates i_CurrentCoordinate)
@@ -324,6 +314,22 @@ namespace Ex02_Othelo
             io_NextCoordinateInDirection.X = (byte)(i_CurrentCoordinate.X + 1);
             io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y);
         }
+
+        public List<Piece> this[Coordinates i_Cell]
+        {
+            // This indexer returns the piece in the index of the given coordinate.
+            get
+            {
+                return m_ChangeTeamPieces[i_Cell.Y, i_Cell.X];
+            }
+
+            // This indexer enter the given piece at the place of the board that the coordinate represent.
+            set
+            {
+                m_ChangeTeamPieces[i_Cell.Y, i_Cell.X] = value;
+            }
+        }
+
 
         //-----------------------------------------------------------------------------------------
 
@@ -389,18 +395,35 @@ namespace Ex02_Othelo
         }
 
         //NEED TO FILL
-        public void setPiece(Coordinates i_Coordinate)
+        public bool setPiece(Coordinates i_Coordinate)
         {
+
+            bool setPieceValidation = true;
+            if (!setPlaceValidation(i_Coordinate))
+            {
+                setPieceValidation = false;
+            }
             Piece newPiece = new Piece(s_Turn, i_Coordinate);
             s_GamePanel[i_Coordinate] = newPiece;
 
+            foreach ( Piece currentPieceToFlip in m_ChangeTeamPieces[i_Coordinate.X, i_Coordinate.Y])
+            {
+                currentPieceToFlip.changePieceTeam();
+            }
+
+            return setPieceValidation;
         }
+
+        public bool setPlaceValidation(Coordinates i_CurrentCoordinate)
+        {
+            return (m_ChangeTeamPieces[i_CurrentCoordinate.X, i_CurrentCoordinate.Y] != null);
+        }        
 
         //
         public void ChangeTurn()
         {
             s_Turn = s_Turn == Player.eTeam.Black ? Player.eTeam.White : Player.eTeam.Black;
-            buildCurrentValidMovesList();
+            makeAListOfCurrectMoves();
         }
 
         //
@@ -408,5 +431,7 @@ namespace Ex02_Othelo
         {
             return s_Turn == m_Player1.r_Team ? m_Player2 : m_Player1;
         }
+
+
     }
 }

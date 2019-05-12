@@ -55,5 +55,10 @@ namespace Ex02_Othelo
             }
         }
 
+        public void changePieceTeam()
+        {
+           r_Team = r_Team == Player.eTeam.Black ? Player.eTeam.White : Player.eTeam.Black;
+        }
+
     }
 }
