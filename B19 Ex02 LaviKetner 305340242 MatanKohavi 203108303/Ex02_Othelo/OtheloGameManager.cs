@@ -36,7 +36,7 @@ namespace Ex02_Othelo
         private Player                  m_Player2;
         private static Player.eTeam     s_Turn             = Player.eTeam.Black;
         private Player                  m_Winner           = null;
-        List<Piece>[,] m_ChangeTeamPieces;
+        private List<Piece>[,]          m_ChangeTeamPieces;
 
 
         //--------------------------------------------------------------------------------------//
@@ -132,6 +132,17 @@ namespace Ex02_Othelo
                 for (int j = 0; j < s_GamePanel.r_Size; j++) 
                 {
                     m_ChangeTeamPieces[i, j] = new List<Piece>();
+                }
+            }
+        }
+
+        private void clearListOfCurrectMoves()
+        {
+            for (int i = 0; i < s_GamePanel.r_Size; i++)
+            {
+                for (int j = 0; j < s_GamePanel.r_Size; j++)
+                {
+                    m_ChangeTeamPieces[i, j].Clear();
                 }
             }
         }
@@ -400,7 +411,8 @@ namespace Ex02_Othelo
         //NEED TO FILL
         public bool IsGameOver()
         {
-            return true;
+            bool isGameOver = false;
+            return isGameOver;
         }
 
         //NEED TO FILL
@@ -418,12 +430,16 @@ namespace Ex02_Othelo
             {
                 setPieceValidation = false;
             }
+
             Piece newPiece = new Piece(s_Turn, i_Coordinate);
             s_GamePanel[i_Coordinate] = newPiece;
 
+            GetCurrentPlayer().AddPiece(s_GamePanel[i_Coordinate]);
+            
             foreach (Piece currentPieceToFlip in m_ChangeTeamPieces[i_Coordinate.X,i_Coordinate.Y])
             {
                 currentPieceToFlip.changePieceTeam();
+                GetCurrentPlayer().AddPiece(currentPieceToFlip);
             }
 
             return setPieceValidation;
@@ -438,6 +454,7 @@ namespace Ex02_Othelo
         public void ChangeTurn()
         {
             s_Turn = s_Turn == Player.eTeam.Black ? Player.eTeam.White : Player.eTeam.Black;
+            clearListOfCurrectMoves();
             makeAListOfCurrectMoves();
         }
 
@@ -445,6 +462,14 @@ namespace Ex02_Othelo
         public Player GetOpposingPlayer()
         {
             return s_Turn == m_Player1.r_Team ? m_Player2 : m_Player1;
+        }
+
+        public void changeRivalPiece(Coordinates i_Coordinate)
+        {
+            foreach (Piece pieceToChange in m_ChangeTeamPieces[i_Coordinate.X, i_Coordinate.Y])
+            {
+                s_GamePanel[i_Coordinate].changePieceTeam();
+            }
         }
 
 

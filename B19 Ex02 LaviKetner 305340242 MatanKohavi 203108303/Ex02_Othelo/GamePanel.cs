@@ -53,12 +53,12 @@ namespace Ex02_Othelo
         //
         public bool DoesCellExist (Coordinates i_Cell)
         {
-            return i_Cell.X >= 1 && i_Cell.X <= r_Size && i_Cell.Y >= 0 && i_Cell.Y <= r_Size;
+            return i_Cell.X >= 0 && i_Cell.X <= (byte)(r_Size -1) && i_Cell.Y >= 0 && i_Cell.Y <= (byte)(r_Size - 1);
         }
 
         public bool DoesCellOccupied(Coordinates i_Cell)
         {
-            return m_Board[i_Cell.Y, i_Cell.X] != null;
+            return m_Board[i_Cell.X, i_Cell.Y] != null;
         }
 
         //

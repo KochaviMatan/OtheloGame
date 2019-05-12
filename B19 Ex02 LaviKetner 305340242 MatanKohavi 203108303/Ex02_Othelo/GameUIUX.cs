@@ -92,9 +92,7 @@ namespace Ex02_Othelo
                     doComputerMove();
                 }
                 else
-                {
-                    // Getting valid str action.
-                     
+                {                 
                     doAMoveOrQuit();
                 }
 
@@ -140,12 +138,11 @@ namespace Ex02_Othelo
             if(!m_OtheloGameManager.setPiece(i_Coordinate))
             {
                 doAMoveOrQuit();
-            }
-
+            }                               
+    
             m_OtheloGameManager.ChangeTurn();
             clearScreenAndPrintTheActionThatRivalDone();
         }
-
 
         //NEED TO FILL
         private void currentGameRoundIsOver()
@@ -185,8 +182,8 @@ namespace Ex02_Othelo
         //
         private void convertStrToMove(string i_ValidStringInput, out Coordinates i_Coordinate)
         {
-            byte xCoordinate = (byte)(i_ValidStringInput[0] - 'A'); 
-            byte yCoordinate = (byte)(i_ValidStringInput[1] - '1');
+            byte xCoordinate = (byte)(i_ValidStringInput[1] - '1'); 
+            byte yCoordinate = (byte)(i_ValidStringInput[0] - 'A');
 
             i_Coordinate = new Coordinates(xCoordinate, yCoordinate);
         }
@@ -358,7 +355,7 @@ namespace Ex02_Othelo
             printPlayersTurnMsg();
             string playerAction = Console.ReadLine();
 
-            convertStrToMove(m_CurrentPlayerInput, out Coordinate);
+            convertStrToMove(playerAction, out Coordinate);
 
             while (!isValidSyntexAndAction(playerAction))
             {
