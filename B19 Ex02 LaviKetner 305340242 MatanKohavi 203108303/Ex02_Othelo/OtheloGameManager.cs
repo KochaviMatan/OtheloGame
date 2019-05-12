@@ -8,10 +8,10 @@ namespace Ex02_Othelo
         //                                   Conts & Enum                                       //
         //--------------------------------------------------------------------------------------//
 
-        const byte k_LeftUpWhite     = 0,
-                   k_RightUpBlack    = 1, 
-                   k_LeftDownBlack   = 2,
-                   k_RightDownWhite  = 3;
+        const byte k_RightUpBlack   = 0,
+                   k_LeftUpWhite    = 1,
+                   k_LeftDownBlack  = 2,
+                   k_RightDownWhite = 3;
 
         const byte k_NumOfDirections = 8;
 
@@ -36,7 +36,8 @@ namespace Ex02_Othelo
         private Player              m_Player2;
         private static Player.eTeam s_Turn              = Player.eTeam.Black;
         private Player              m_Winner            = null;
-        private List<Piece>[,]      m_ChangeTeamPieces;
+        private List<Piece>[,] m_ChangeTeamPieces;
+        //private List<List<Piece>> m_ChangeTeamPieces = new List<List<Piece>>();
 
         //--------------------------------------------------------------------------------------//
         //                                  Run Game                                            //
@@ -97,18 +98,18 @@ namespace Ex02_Othelo
             byte middleRow = (byte)((s_GamePanel.r_Size / 2) - 1);
             byte middleColumn = middleRow;
 
-            io_fourInitializeCoordinate[k_LeftUpWhite]    = new Coordinates(middleRow, middleColumn);
-            io_fourInitializeCoordinate[k_RightUpBlack]   = new Coordinates(middleRow, (byte)(middleColumn + 1));
-            io_fourInitializeCoordinate[k_LeftDownBlack]  = new Coordinates((byte)(middleRow + 1), (byte)(middleColumn));
-            io_fourInitializeCoordinate[k_RightDownWhite] = new Coordinates((byte)(middleRow + 1), (byte)(middleColumn + 1)); 
+            io_fourInitializeCoordinate[k_RightUpBlack] = new Coordinates(middleRow, (byte)(middleColumn + 1));
+            io_fourInitializeCoordinate[k_LeftUpWhite] = new Coordinates(middleRow, middleColumn);
+            io_fourInitializeCoordinate[k_LeftDownBlack] = new Coordinates((byte)(middleRow + 1), (byte)(middleColumn));
+            io_fourInitializeCoordinate[k_RightDownWhite] = new Coordinates((byte)(middleRow + 1), (byte)(middleColumn + 1));
         }
 
         //
         private void AssignTheFourInitializePiecesToPlayers(Piece[] i_fourInitializePiece)
         {
             m_Player1.AddPiece(i_fourInitializePiece[k_RightUpBlack]);
-            m_Player1.AddPiece(i_fourInitializePiece[k_LeftDownBlack]);
             m_Player2.AddPiece(i_fourInitializePiece[k_LeftUpWhite]);
+            m_Player1.AddPiece(i_fourInitializePiece[k_LeftDownBlack]);
             m_Player2.AddPiece(i_fourInitializePiece[k_RightDownWhite]);
         }
 
@@ -181,6 +182,7 @@ namespace Ex02_Othelo
             foreach (Piece RivalPiece in i_CurrentListOfsequencePieces)
             {
                 m_ChangeTeamPieces[i_CurrentCoordinate.X, i_CurrentCoordinate.Y].Add(RivalPiece);
+                //m_ChangeTeamPieces[i_CurrentCoordinate.X][i_CurrentCoordinate.Y].add(RivalPiece);
             }
         }
 
@@ -269,14 +271,14 @@ namespace Ex02_Othelo
 
         private void moveCoordinateTopRightDirection(ref Coordinates io_NextCoordinateInDirection, Coordinates i_CurrentCoordinate)
         {
-            io_NextCoordinateInDirection.X = (byte)(i_CurrentCoordinate.X + 1);
-            io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y - 1);
+            io_NextCoordinateInDirection.X = (byte)(i_CurrentCoordinate.X - 1);
+            io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y + 1);
         }
 
         private void moveCoordinateTopDirection(ref Coordinates io_NextCoordinateInDirection, Coordinates i_CurrentCoordinate)
         {
-            io_NextCoordinateInDirection.X = (byte)(i_CurrentCoordinate.X);
-            io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y - 1);
+            io_NextCoordinateInDirection.X = (byte)(i_CurrentCoordinate.X - 1);
+            io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y);
         }
 
         private void moveCoordinateTopLeftDirection(ref Coordinates io_NextCoordinateInDirection, Coordinates i_CurrentCoordinate)
@@ -287,20 +289,20 @@ namespace Ex02_Othelo
 
         private void moveCoordinateLeftDirection(ref Coordinates io_NextCoordinateInDirection, Coordinates i_CurrentCoordinate)
         {
-            io_NextCoordinateInDirection.X = (byte)(i_CurrentCoordinate.X - 1);
-            io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y);
+            io_NextCoordinateInDirection.X = (byte)(i_CurrentCoordinate.X);
+            io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y - 1);
         }
 
         private void moveCoordinateLeftDownDirection(ref Coordinates io_NextCoordinateInDirection, Coordinates i_CurrentCoordinate)
         {
-            io_NextCoordinateInDirection.X = (byte)(i_CurrentCoordinate.X - 1);
-            io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y + 1);
+            io_NextCoordinateInDirection.X = (byte)(i_CurrentCoordinate.X + 1);
+            io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y - 1);
         }
 
         private void moveCoordinateDownDirection(ref Coordinates io_NextCoordinateInDirection, Coordinates i_CurrentCoordinate)
         {
-            io_NextCoordinateInDirection.X = (byte)(i_CurrentCoordinate.X);
-            io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y + 1);
+            io_NextCoordinateInDirection.X = (byte)(i_CurrentCoordinate.X + 1);
+            io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y);
         }
 
         private void moveCoordinateRightDownDirection(ref Coordinates io_NextCoordinateInDirection, Coordinates i_CurrentCoordinate)
@@ -311,8 +313,8 @@ namespace Ex02_Othelo
 
         private void moveCoordinateRightDirection(ref Coordinates io_NextCoordinateInDirection, Coordinates i_CurrentCoordinate)
         {
-            io_NextCoordinateInDirection.X = (byte)(i_CurrentCoordinate.X + 1);
-            io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y);
+            io_NextCoordinateInDirection.X = (byte)(i_CurrentCoordinate.X);
+            io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y + 1);
         }
 
         public List<Piece> this[Coordinates i_Cell]

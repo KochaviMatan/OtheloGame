@@ -36,13 +36,13 @@ namespace Ex02_Othelo
             // This indexer returns the piece in the index of the given coordinate.
             get
             {
-                return m_Board[i_Cell.Y, i_Cell.X];
+                return m_Board[i_Cell.X, i_Cell.Y];
             }
 
             // This indexer enter the given piece at the place of the board that the coordinate represent.
             set
             {
-                m_Board[i_Cell.Y, i_Cell.X] = value;
+                m_Board[i_Cell.X, i_Cell.Y] = value;
             }
         }
 
@@ -71,7 +71,7 @@ namespace Ex02_Othelo
             StringBuilder boardString = new StringBuilder(buildBoardHeaderString());
 
             // Bulid the board that will be drawn:
-            for (byte row = 0; row < r_Size; row++)
+            for (byte row = 0; row <r_Size; row++)
             {
                 // Open row with row header:
                 boardString.Append(currentRowHeader.ToString());
