@@ -121,6 +121,7 @@ namespace Ex02_Othelo
             Coordinates Coordinate;
 
             convertStrToMove(m_CurrentPlayerInput, out Coordinate);
+
             m_OtheloGameManager.setPiece(Coordinate);
 
             m_OtheloGameManager.ChangeTurn();
@@ -279,7 +280,8 @@ namespace Ex02_Othelo
             Console.WriteLine("Player{0} Please Enter your name: ", i_Player);
             string userName = Console.ReadLine();
 
-            while (!isValidName(userName))
+            while (!isValidName(userName )&&  m_ChangeTeamPieces[Coordinate] != null)
+
             {
                 printErrorMsgForGettingInvalidName();
                 userName = Console.ReadLine();
@@ -350,12 +352,13 @@ namespace Ex02_Othelo
             printPlayersTurnMsg();
             string playerAction = Console.ReadLine();
 
-            while (!isValidSyntexAndAction(playerAction))
+            while (!isValidSyntexAndAction(playerAction) && m_ChangeTeamPieces[Coordinate] != null)
             {
                 printErrorMsgForGettingInvalidAction();
                 printPlayersTurnMsg();
                 playerAction = Console.ReadLine();
             }
+
 
             return playerAction;
         }
