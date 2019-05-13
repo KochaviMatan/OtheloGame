@@ -43,7 +43,6 @@ namespace Ex02_Othelo
         private OtheloGameManager m_OtheloGameManager  = null;
         private bool              m_GameOver           = false;
         private Coordinates       m_CoordinateInput;
-        private bool              m_IsInputQuit        = false; 
 
         //--------------------------------------------------------------------------------------//
         //                                  Run Game                                            //
@@ -111,7 +110,8 @@ namespace Ex02_Othelo
         //NEED TO FILL
         private void doComputerMove()
         {
-            
+            m_OtheloGameManager.SetComputerPiece();
+            clearScreenAndPrintGamePanel();
         }
 
 
@@ -135,8 +135,7 @@ namespace Ex02_Othelo
         //NEED TO FILL
         private void doPlayerMove(Coordinates i_Coordinate)
         {
-            m_OtheloGameManager.setPiece(i_Coordinate);
-
+            m_OtheloGameManager.setInputPiece(i_Coordinate);
             clearScreenAndPrintGamePanel();
         }
 
@@ -393,8 +392,6 @@ namespace Ex02_Othelo
             return isValidGameMode;
         }
 
-        // That's tha place we need to to check validation of player input, using method from OtheloGame.
-        // And not in setPiece.
         private bool isValidSyntexAndAction(string i_StringInput, ref bool io_IsQuitInput)
         {
             bool isValidInput = true; 

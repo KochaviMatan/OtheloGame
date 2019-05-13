@@ -173,13 +173,13 @@ namespace Ex02_Othelo
 
                         currentCoordinate = getCellCoordinateToProcced(currentCoordinate, currentDirection);
 
-                        if (s_GamePanel.DoesCellExist(currentCoordinate) && checkIfArriveToEmptyCellOnBoard(currentCoordinate))
+                        if (checkIfArriveToEmptyCellOnBoard(currentCoordinate))
                         {
                             saveTheSequenceList(ref currentListOfsequencePieces, currentCoordinate);
                             currentListOfsequencePieces.Clear();
                         }
 
-                        else if (s_GamePanel.DoesCellExist(currentCoordinate) && isCurrentCoordinateContainAllyPiece(currentCoordinate)) 
+                        else if (isCurrentCoordinateContainAllyPiece(currentCoordinate)) 
                         {
                             currentListOfsequencePieces.Clear();
                             break;
@@ -193,12 +193,12 @@ namespace Ex02_Othelo
 
         private bool isCurrentCoordinateContainAllyPiece(Coordinates i_CurrentCoordinate)
         {
-            return s_GamePanel[i_CurrentCoordinate].r_Team == s_Turn;
+            return s_GamePanel.DoesCellExist(i_CurrentCoordinate) && s_GamePanel[i_CurrentCoordinate].r_Team == s_Turn;
         }
 
         private bool checkIfArriveToEmptyCellOnBoard(Coordinates i_CurrentCoordinate)
         {
-            return s_GamePanel[i_CurrentCoordinate] == null;
+            return s_GamePanel.DoesCellExist(i_CurrentCoordinate) && s_GamePanel[i_CurrentCoordinate] == null;
         }
 
         private void saveTheSequenceList(ref List<Piece> i_CurrentListOfsequencePieces, Coordinates i_CurrentCoordinate)
@@ -418,8 +418,47 @@ namespace Ex02_Othelo
 
         }
 
-        //NEED TO FILL
-        public void setPiece(Coordinates i_Coordinate)
+        public void SetComputerPiece()
+        {         
+            Coordinates maxPiecesToFlipCoordinate;
+            int maxPiecesToFlip;
+
+            maxPiecesToFlipCoordinate = getMaxPiecesToFlipCoordinate(out maxPiecesToFlip);
+            makeADelay();
+
+            if (maxPiecesToFlip == 0) 
+            {
+                //Need To end the game
+            }
+
+            setInputPiece(maxPiecesToFlipCoordinate);
+        }
+
+        private void makeADelay()
+        {
+            System.Threading.Thread.Sleep((int)System.TimeSpan.FromSeconds(1.5).TotalMilliseconds);
+        }
+
+        private Coordinates getMaxPiecesToFlipCoordinate(out int o_MaxPiecesToFlip)
+        {
+            o_MaxPiecesToFlip = 0;
+            Coordinates maxPiecesToFlipCoordinate = new Coordinates(0, 0);
+
+            for (byte i = 0; i < s_GamePanel.r_Size; i++)
+            {
+                for (byte j = 0; j < s_GamePanel.r_Size; j++)
+                {
+                    if (m_ChangeTeamPieces[i, j].Count > o_MaxPiecesToFlip)
+                    {
+                        o_MaxPiecesToFlip = m_ChangeTeamPieces[i, j].Count;
+                        maxPiecesToFlipCoordinate = new Coordinates(i, j);
+                    }
+                }
+            }
+            return maxPiecesToFlipCoordinate;
+        }
+
+        public void setInputPiece(Coordinates i_Coordinate)
         {
 
             Piece newPiece = new Piece(s_Turn, i_Coordinate);
