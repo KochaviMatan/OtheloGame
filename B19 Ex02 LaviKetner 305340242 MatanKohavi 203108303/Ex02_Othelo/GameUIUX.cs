@@ -42,7 +42,8 @@ namespace Ex02_Othelo
 
         private OtheloGameManager m_OtheloGameManager  = null;
         private bool              m_GameOver           = false;
-        private string            m_CurrentPlayerInput = null;
+        private Coordinates       m_CoordinateInput;
+        private bool              m_IsInputQuit        = false; 
 
         //--------------------------------------------------------------------------------------//
         //                                  Run Game                                            //
@@ -117,31 +118,26 @@ namespace Ex02_Othelo
         //NEED TO FILL
         private void doAMoveOrQuit()
         {
-            Coordinates Coordinate;
-            m_CurrentPlayerInput = getValidActionFromThePlayer();
-            convertStrToMove(m_CurrentPlayerInput, out Coordinate);
-
-            if (isQuitSyntex(m_CurrentPlayerInput))
+            bool isQuitInput = getValidActionFromThePlayer();
+           
+            if (!isQuitInput)
+            {
+                doPlayerMove(m_CoordinateInput);
+            }
+            else
             {
                 m_OtheloGameManager.Winner = m_OtheloGameManager.GetOpposingPlayer();
                 currentGameRoundIsOver();
             }
-            else
-            {
-                doPlayerMove(Coordinate);
-            }
+                                                 
         }
 
         //NEED TO FILL
         private void doPlayerMove(Coordinates i_Coordinate)
         {
-            if(!m_OtheloGameManager.setPiece(i_Coordinate))
-            {
-                doAMoveOrQuit();
-            }                               
-    
-            m_OtheloGameManager.ChangeTurn();
-            clearScreenAndPrintTheActionThatRivalDone();
+            m_OtheloGameManager.setPiece(i_Coordinate);
+
+            clearScreenAndPrintGamePanel();
         }
 
         //NEED TO FILL
@@ -174,18 +170,17 @@ namespace Ex02_Othelo
         private void initializeGameRound()
         {
             m_GameOver = false;
-            m_CurrentPlayerInput = null;
             m_OtheloGameManager.InitializeGame();
             clearScreenAndPrintGamePanel();
         }
 
         //
-        private void convertStrToMove(string i_ValidStringInput, out Coordinates i_Coordinate)
+        private void convertStrToMove(string i_ValidStringInput)
         {
             byte xCoordinate = (byte)(i_ValidStringInput[1] - '1'); 
             byte yCoordinate = (byte)(i_ValidStringInput[0] - 'A');
 
-            i_Coordinate = new Coordinates(xCoordinate, yCoordinate);
+            m_CoordinateInput = new Coordinates(xCoordinate, yCoordinate);
         }
 
 
@@ -198,20 +193,6 @@ namespace Ex02_Othelo
         {
             Screen.Clear();
             Console.WriteLine(m_OtheloGameManager.GamePanel.GetBoardPanelAsString());
-        }
-
-        //
-        private void clearScreenAndPrintTheActionThatRivalDone()
-        {
-            clearScreenAndPrintGamePanel();
-            printPreviousTurnMoveMsg(m_CurrentPlayerInput);
-        }
-
-        // 
-        private void clearScreenAndPrintTheActionThatCurrentPlayerDone()
-        {
-            clearScreenAndPrintGamePanel();
-            printCurrentPreviousTuenMoveOfCurrentPlayerMsg(m_CurrentPlayerInput);
         }
 
         //
@@ -349,23 +330,21 @@ namespace Ex02_Othelo
         }
 
         //
-        private string getValidActionFromThePlayer()
+        public bool getValidActionFromThePlayer()
         {
-            Coordinates Coordinate;
+            
+            bool isQuitInput = false; 
             printPlayersTurnMsg();
             string playerAction = Console.ReadLine();
 
-            convertStrToMove(playerAction, out Coordinate);
-
-            while (!isValidSyntexAndAction(playerAction))
+            while (!isValidSyntexAndAction(playerAction, ref isQuitInput))
             {
                 printErrorMsgForGettingInvalidAction();
                 printPlayersTurnMsg();
                 playerAction = Console.ReadLine();
             }
-
-
-            return playerAction;
+          
+            return isQuitInput;
         }
 
         //--------------------------------------------------------------------------------------//
@@ -414,10 +393,25 @@ namespace Ex02_Othelo
             return isValidGameMode;
         }
 
-        // EMPTY
-        private bool isValidSyntexAndAction(string i_StringInput)
+        // That's tha place we need to to check validation of player input, using method from OtheloGame.
+        // And not in setPiece.
+        private bool isValidSyntexAndAction(string i_StringInput, ref bool io_IsQuitInput)
         {
-            return true;
+            bool isValidInput = true; 
+            io_IsQuitInput = isQuitSyntex(i_StringInput);
+
+            if (!((i_StringInput[0]) >= 'A' && (i_StringInput[0]) <= (m_OtheloGameManager.GamePanel.r_Size) - 'A') && (i_StringInput[1] >= 1 && i_StringInput[1] <= (m_OtheloGameManager.GamePanel.r_Size)))
+            {
+                isValidInput = false; 
+            }
+
+            if(isValidInput)
+            {
+                convertStrToMove(i_StringInput);
+                isValidInput = m_OtheloGameManager.setPlaceValidation(m_CoordinateInput);
+            }
+
+            return (io_IsQuitInput || isValidInput);
         }
 
         //
