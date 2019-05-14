@@ -408,27 +408,23 @@ namespace Ex02_Othelo
                 return m_Player2;
             }
         }
-
-        //NEED TO FILL
-        public bool IsGameOver()
-        {
-            bool isGameOver = false;
-            return isGameOver;
-        }
-
-        //NEED TO FILL
+ 
+        //
         public void UpdatePlayerScore()
         {
-            if (GetOpposingPlayer().IsHaveValidMove || GetOpposingPlayer().Pieces.Count > GetCurrentPlayer().Pieces.Count)
+
+            GetOpposingPlayer().Score = GetOpposingPlayer().Pieces.Count;
+            GetCurrentPlayer().Score = GetCurrentPlayer().Pieces.Count;
+
+            if (GetOpposingPlayer().Score > GetCurrentPlayer().Score)
             {
                 Winner = GetOpposingPlayer();
-                GetOpposingPlayer().Score++;
             }
             else
             {
                 Winner = GetCurrentPlayer();
-                GetCurrentPlayer().Score++;
             }
+
         }
 
         public void SetComputerPiece()
@@ -437,7 +433,6 @@ namespace Ex02_Othelo
             int maxPiecesToFlip;
 
             maxPiecesToFlipCoordinate = getMaxPiecesToFlipCoordinate(out maxPiecesToFlip);
-            makeADelay();
 
             if (maxPiecesToFlip != 0) 
             {
@@ -446,15 +441,11 @@ namespace Ex02_Othelo
 
         }
 
-        private void makeADelay()
-        {
-            System.Threading.Thread.Sleep((int)System.TimeSpan.FromSeconds(1.5).TotalMilliseconds);
-        }
-
         private Coordinates getMaxPiecesToFlipCoordinate(out int o_MaxPiecesToFlip)
         {
             o_MaxPiecesToFlip = 0;
             Coordinates maxPiecesToFlipCoordinate = new Coordinates(0, 0);
+            List<Coordinates> maxListPiecesToFlipCoordinate = new List<Coordinates>();
 
             for (byte i = 0; i < s_GamePanel.r_Size; i++)
             {
@@ -462,12 +453,18 @@ namespace Ex02_Othelo
                 {
                     if (m_ChangeTeamPieces[i, j].Count > o_MaxPiecesToFlip)
                     {
+                        
                         o_MaxPiecesToFlip = m_ChangeTeamPieces[i, j].Count;
                         maxPiecesToFlipCoordinate = new Coordinates(i, j);
+                        maxListPiecesToFlipCoordinate.Add(maxPiecesToFlipCoordinate);
                     }
                 }
             }
-            return maxPiecesToFlipCoordinate;
+
+            System.Random randomMaxCoordinate = new System.Random();
+            int randomMaxCoordinateLocation = randomMaxCoordinate.Next(0, maxListPiecesToFlipCoordinate.Count);
+
+            return maxListPiecesToFlipCoordinate[randomMaxCoordinateLocation];
         }
 
         public void setInputPiece(Coordinates i_Coordinate)
@@ -514,27 +511,6 @@ namespace Ex02_Othelo
             {
                 s_GamePanel[i_Coordinate].changePieceTeam();
             }
-        }
-
-        public bool isMoreMovesAvaible()
-        {
-            bool isMoreMovesAvailble = false;
-
-            if (GetCurrentPlayer().Pieces.Count > 0)
-            {
-                for (int i = 0; i < s_GamePanel.r_Size; i++)
-                {
-                    for (int j = 0; j < s_GamePanel.r_Size; j++)
-                    {
-                        if (m_ChangeTeamPieces[i, j].Count > 0)
-                        {
-                             isMoreMovesAvailble = true;
-                        }
-                    }
-                }
-            }
-
-            return isMoreMovesAvailble;
         }
 
     }

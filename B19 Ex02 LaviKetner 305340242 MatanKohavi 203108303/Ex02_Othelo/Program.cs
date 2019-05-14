@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Ex02_Othelo
+﻿namespace Ex02_Othelo
 {
     class Program
     {
@@ -8,7 +6,6 @@ namespace Ex02_Othelo
         {
             GameUIUX gameUIUX = new GameUIUX();
             gameUIUX.Run();
-
         }
     }
 }

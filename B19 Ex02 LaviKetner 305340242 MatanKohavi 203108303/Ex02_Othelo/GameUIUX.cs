@@ -5,7 +5,6 @@ namespace Ex02_Othelo
 {
     class GameUIUX
     {
-
         //--------------------------------------------------------------------------------------//
         //                                  Enum                                                //
         //--------------------------------------------------------------------------------------//
@@ -107,15 +106,22 @@ namespace Ex02_Othelo
         {
             if (m_OtheloGameManager.GetCurrentPlayer().IsHaveValidMove) //(m_OtheloGameManager.isMoreMovesAvaible()) 
             {
+                makeADelay();
                 m_OtheloGameManager.SetComputerPiece();
                 clearScreenAndPrintGamePanel();
             }
             else
             {
-                currentGameRoundIsOver();
-            }
-
-            
+                if (!m_OtheloGameManager.GetOpposingPlayer().IsHaveValidMove)
+                {
+                    currentGameRoundIsOver();
+                }
+                else
+                {
+                    printErrorMsgForNoValidMove();
+                    m_OtheloGameManager.ChangeTurn();
+                }
+            }           
         }
 
 
@@ -128,10 +134,23 @@ namespace Ex02_Othelo
                 {
                     doPlayerMove(m_CoordinateInput);
                 }
+                else
+                {
+                    endGame();
+
+                }
             }
             else
             {   
-                currentGameRoundIsOver();
+                if(!m_OtheloGameManager.GetOpposingPlayer().IsHaveValidMove)
+                {
+                    currentGameRoundIsOver();
+                }
+                else
+                {
+                    printErrorMsgForNoValidMove();
+                    m_OtheloGameManager.ChangeTurn();
+                }
             }                                      
         }
 
@@ -264,7 +283,7 @@ namespace Ex02_Othelo
             while (!isValidName(userName))
 
             {
-                printErrorMsgForGettingInvalidName();
+                printErrorMsgForGettingInvalidName(i_Player);
                 userName = Console.ReadLine();
             }
 
@@ -421,10 +440,11 @@ namespace Ex02_Othelo
         //--------------------------------------------------------------------------------------//
 
         // This function print error message due to receiving invalid name.
-        private void printErrorMsgForGettingInvalidName()
+        private void printErrorMsgForGettingInvalidName(byte i_Player)
         {
             Console.WriteLine("Error! Invalid input:");
             Console.WriteLine("the name need contain no more than {0} and no less then {1} letters and without spaces...", k_NameMaxLength, k_NameMinLength);
+            Console.WriteLine("Player{0} Please RE-Enter your name: ", i_Player);
         }
 
         // This function print error message due to receiving invalid board size.
@@ -451,6 +471,22 @@ namespace Ex02_Othelo
             Console.WriteLine("Error! Invalid input: the action you try to do is not valid...");
         }
 
+        private void printErrorMsgForNoValidMove()
+        {
+            Console.WriteLine("{0} doesnt have valid move. The turn goes to {1}", m_OtheloGameManager.GetCurrentPlayer(), m_OtheloGameManager.GetOpposingPlayer());
+        }
 
+        private void endGame()
+        {
+            Screen.Clear();
+            System.Console.Write("The User entered a quit request. Game is closing. BYE BYE");
+            makeADelay();
+            Environment.Exit(0);
+        }
+
+        private void makeADelay()
+        {
+            System.Threading.Thread.Sleep((int)System.TimeSpan.FromSeconds(1.5).TotalMilliseconds);
+        }
     }
 }
