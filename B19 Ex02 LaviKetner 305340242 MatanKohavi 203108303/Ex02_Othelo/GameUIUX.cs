@@ -12,7 +12,7 @@ namespace Ex02_Othelo
 
         public enum eBoardSize : byte
         {
-            Small = 3,
+            Small = 6,
             Large = 8
         }
 
