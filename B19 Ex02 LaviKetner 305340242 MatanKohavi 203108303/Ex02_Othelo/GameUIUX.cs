@@ -102,18 +102,16 @@ namespace Ex02_Othelo
             currentGameRoundIsOver();
         }
                 
-        //NEED TO FILL
+        //
         private void doComputerMove()
         {
-            if (m_OtheloGameManager.GetCurrentPlayer().IsHaveValidMove) //m_OtheloGameManager.isMoreMovesAvaible())
+            if (m_OtheloGameManager.GetCurrentPlayer().IsHaveValidMove) //(m_OtheloGameManager.isMoreMovesAvaible()) 
             {
                 m_OtheloGameManager.SetComputerPiece();
                 clearScreenAndPrintGamePanel();
             }
             else
             {
-                m_GameOver = true;
-                m_OtheloGameManager.Winner = m_OtheloGameManager.GetOpposingPlayer();
                 currentGameRoundIsOver();
             }
 
@@ -124,7 +122,7 @@ namespace Ex02_Othelo
         //
         private void doAMoveOrQuit()
         {
-            if (m_OtheloGameManager.GetCurrentPlayer().IsHaveValidMove) //m_OtheloGameManager.isMoreMovesAvaible())
+            if (m_OtheloGameManager.GetCurrentPlayer().IsHaveValidMove) //(m_OtheloGameManager.isMoreMovesAvaible()) 
             {
                 if (!getValidActionFromThePlayer())
                 {
@@ -132,12 +130,9 @@ namespace Ex02_Othelo
                 }
             }
             else
-            { 
-                    m_GameOver = true;
-                    m_OtheloGameManager.Winner = m_OtheloGameManager.GetOpposingPlayer();
-                    currentGameRoundIsOver();
-            }
-                                               
+            {   
+                currentGameRoundIsOver();
+            }                                      
         }
 
 
@@ -170,17 +165,12 @@ namespace Ex02_Othelo
             }
             else
             {
-                initializeGameRound();
+                m_OtheloGameManager.GamePanel.clearBoard();
+                m_OtheloGameManager.InitializeGame();
+                clearScreenAndPrintGamePanel();
             }
         }
                 
-        //
-        private void initializeGameRound()
-        {
-            m_GameOver = false;
-            m_OtheloGameManager.InitializeGame();
-            clearScreenAndPrintGamePanel();
-        }
 
         //
         private void convertStrToMove(string i_ValidStringInput)

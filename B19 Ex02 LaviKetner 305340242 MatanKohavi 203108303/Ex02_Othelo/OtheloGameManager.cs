@@ -147,6 +147,7 @@ namespace Ex02_Othelo
             }
         }
 
+
         //--------------------------------------------------------------------------------------//
         //                                   Movment Function                                   //
         //--------------------------------------------------------------------------------------//
@@ -173,13 +174,12 @@ namespace Ex02_Othelo
                         Piece currentRivalPiece = s_GamePanel[currentCoordinate];
                         currentListOfsequencePieces.Add(currentRivalPiece);
 
-                        GetCurrentPlayer().IsHaveValidMove = true;
-
                         currentCoordinate = getCellCoordinateToProcced(currentCoordinate, currentDirection);
 
                         if (checkIfArriveToEmptyCellOnBoard(currentCoordinate))
                         {
                             saveTheSequenceList(ref currentListOfsequencePieces, currentCoordinate);
+                            GetCurrentPlayer().IsHaveValidMove = true;
                             currentListOfsequencePieces.Clear();
                         }
 
@@ -419,7 +419,16 @@ namespace Ex02_Othelo
         //NEED TO FILL
         public void UpdatePlayerScore()
         {
-
+            if (GetOpposingPlayer().IsHaveValidMove || GetOpposingPlayer().Pieces.Count > GetCurrentPlayer().Pieces.Count)
+            {
+                Winner = GetOpposingPlayer();
+                GetOpposingPlayer().Score++;
+            }
+            else
+            {
+                Winner = GetCurrentPlayer();
+                GetCurrentPlayer().Score++;
+            }
         }
 
         public void SetComputerPiece()
@@ -490,6 +499,7 @@ namespace Ex02_Othelo
             s_Turn = s_Turn == Player.eTeam.Black ? Player.eTeam.White : Player.eTeam.Black;
             clearListOfCurrectMoves();
             makeAListOfCurrectMoves();
+            
         }
 
         //

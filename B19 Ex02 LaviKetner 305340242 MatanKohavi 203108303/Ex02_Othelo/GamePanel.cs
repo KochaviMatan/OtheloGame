@@ -56,6 +56,7 @@ namespace Ex02_Othelo
             return i_Cell.X >= 0 && i_Cell.X <= (byte)(r_Size -1) && i_Cell.Y >= 0 && i_Cell.Y <= (byte)(r_Size - 1);
         }
 
+        //
         public bool DoesCellOccupied(Coordinates i_Cell)
         {
             return m_Board[i_Cell.X, i_Cell.Y] != null;
@@ -140,6 +141,17 @@ namespace Ex02_Othelo
             boardHeaderString.AppendLine();
 
             return string.Format("{0}{1}{2}", boardHeaderString, buildSequenceOfBufferSymbol(), System.Environment.NewLine);
+        }
+
+        public void clearBoard()
+        {
+            for (byte row = 0; row < r_Size; row++)
+            {
+                for (byte column = 0; column < r_Size; column++)
+                {
+                    m_Board[row, column] = null;
+                }
+            }
         }
 
     }
