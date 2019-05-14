@@ -153,7 +153,9 @@ namespace Ex02_Othelo
 
 
         private void makeAListOfCurrectMoves()
-        {    
+        {
+            GetCurrentPlayer().IsHaveValidMove = false;
+
             List<Piece> allThePiecesFormCurrentPlayer = GetCurrentPlayer().Pieces;
 
             foreach (Piece currentPiece in allThePiecesFormCurrentPlayer)
@@ -170,6 +172,8 @@ namespace Ex02_Othelo
                     {
                         Piece currentRivalPiece = s_GamePanel[currentCoordinate];
                         currentListOfsequencePieces.Add(currentRivalPiece);
+
+                        GetCurrentPlayer().IsHaveValidMove = true;
 
                         currentCoordinate = getCellCoordinateToProcced(currentCoordinate, currentDirection);
 
@@ -426,12 +430,11 @@ namespace Ex02_Othelo
             maxPiecesToFlipCoordinate = getMaxPiecesToFlipCoordinate(out maxPiecesToFlip);
             makeADelay();
 
-            if (maxPiecesToFlip == 0) 
+            if (maxPiecesToFlip != 0) 
             {
-                //Need To end the game
+                setInputPiece(maxPiecesToFlipCoordinate);
             }
 
-            setInputPiece(maxPiecesToFlipCoordinate);
         }
 
         private void makeADelay()
@@ -503,6 +506,26 @@ namespace Ex02_Othelo
             }
         }
 
+        public bool isMoreMovesAvaible()
+        {
+            bool isMoreMovesAvailble = false;
+
+            if (GetCurrentPlayer().Pieces.Count > 0)
+            {
+                for (int i = 0; i < s_GamePanel.r_Size; i++)
+                {
+                    for (int j = 0; j < s_GamePanel.r_Size; j++)
+                    {
+                        if (m_ChangeTeamPieces[i, j].Count > 0)
+                        {
+                             isMoreMovesAvailble = true;
+                        }
+                    }
+                }
+            }
+
+            return isMoreMovesAvailble;
+        }
 
     }
 }

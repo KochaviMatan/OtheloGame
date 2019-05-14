@@ -12,7 +12,7 @@ namespace Ex02_Othelo
 
         public enum eBoardSize : byte
         {
-            Small = 6,
+            Small = 3,
             Large = 8
         }
 
@@ -95,51 +95,60 @@ namespace Ex02_Othelo
                 {                 
                     doAMoveOrQuit();
                 }
-
-                // Check if the game is over
-                if (m_OtheloGameManager.IsGameOver())
-                {
-                    currentGameRoundIsOver();
-                }
             }
 
             Screen.Clear();
             printGameOverMsg();
+            currentGameRoundIsOver();
         }
                 
         //NEED TO FILL
         private void doComputerMove()
         {
-            m_OtheloGameManager.SetComputerPiece();
-            clearScreenAndPrintGamePanel();
-        }
-
-
-        //NEED TO FILL
-        private void doAMoveOrQuit()
-        {
-            bool isQuitInput = getValidActionFromThePlayer();
-           
-            if (!isQuitInput)
+            if (m_OtheloGameManager.GetCurrentPlayer().IsHaveValidMove) //m_OtheloGameManager.isMoreMovesAvaible())
             {
-                doPlayerMove(m_CoordinateInput);
+                m_OtheloGameManager.SetComputerPiece();
+                clearScreenAndPrintGamePanel();
             }
             else
             {
+                m_GameOver = true;
                 m_OtheloGameManager.Winner = m_OtheloGameManager.GetOpposingPlayer();
                 currentGameRoundIsOver();
             }
-                                                 
+
+            
         }
 
-        //NEED TO FILL
+
+        //
+        private void doAMoveOrQuit()
+        {
+            if (m_OtheloGameManager.GetCurrentPlayer().IsHaveValidMove) //m_OtheloGameManager.isMoreMovesAvaible())
+            {
+                if (!getValidActionFromThePlayer())
+                {
+                    doPlayerMove(m_CoordinateInput);
+                }
+            }
+            else
+            { 
+                    m_GameOver = true;
+                    m_OtheloGameManager.Winner = m_OtheloGameManager.GetOpposingPlayer();
+                    currentGameRoundIsOver();
+            }
+                                               
+        }
+
+
+        //
         private void doPlayerMove(Coordinates i_Coordinate)
         {
             m_OtheloGameManager.setInputPiece(i_Coordinate);
             clearScreenAndPrintGamePanel();
         }
 
-        //NEED TO FILL
+        //
         private void currentGameRoundIsOver()
         {
             Screen.Clear();
@@ -392,20 +401,20 @@ namespace Ex02_Othelo
             return isValidGameMode;
         }
 
+        //
         private bool isValidSyntexAndAction(string i_StringInput, ref bool io_IsQuitInput)
         {
-            bool isValidInput = true; 
+            bool isValidInput = false; 
             io_IsQuitInput = isQuitSyntex(i_StringInput);
 
-            if (!((i_StringInput[0]) >= 'A' && (i_StringInput[0]) <= (m_OtheloGameManager.GamePanel.r_Size) - 'A') && (i_StringInput[1] >= 1 && i_StringInput[1] <= (m_OtheloGameManager.GamePanel.r_Size)))
+            if (i_StringInput.Length == k_MoveStrLength)
             {
-                isValidInput = false; 
-            }
-
-            if(isValidInput)
-            {
-                convertStrToMove(i_StringInput);
-                isValidInput = m_OtheloGameManager.setPlaceValidation(m_CoordinateInput);
+                if (((i_StringInput[0]) >= 'A' && (i_StringInput[0]) <= 'A' + (m_OtheloGameManager.GamePanel.r_Size)) && (i_StringInput[1] >= '0' && i_StringInput[1] <= '0' + (m_OtheloGameManager.GamePanel.r_Size)))
+                {
+                    isValidInput = true;
+                    convertStrToMove(i_StringInput);
+                    isValidInput = m_OtheloGameManager.setPlaceValidation(m_CoordinateInput);
+                }
             }
 
             return (io_IsQuitInput || isValidInput);

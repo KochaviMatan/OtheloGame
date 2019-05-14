@@ -14,6 +14,7 @@ namespace Ex02_Othelo
         private string m_Name = null;
         private int m_Score = 0;
         private bool m_PlayerIsComputer = false;
+        private bool m_IsHaveValidMove = false;
         private List<Piece> m_Pieces = new List<Piece>();
 
         // Player Constructor
@@ -39,6 +40,19 @@ namespace Ex02_Othelo
             set
             {
                 m_Score = value;
+            }
+        }
+
+        public bool IsHaveValidMove
+        {
+            get
+            {
+                return m_IsHaveValidMove;
+            }
+
+            set
+            {
+                m_IsHaveValidMove = value;
             }
         }
 
