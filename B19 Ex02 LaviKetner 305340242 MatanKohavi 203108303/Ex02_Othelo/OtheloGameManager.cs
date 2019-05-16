@@ -53,8 +53,11 @@ namespace Ex02_Othelo
             m_Player2 = new Player(i_Player2Name, i_IsPlayer2IsComputer, Player.eTeam.White);
             initializeChangeTeamPiecesMember();
         }
-        
-        //
+
+        //--------------------------------------------------------------------------------------//
+        //                              Initialize Function                                     //
+        //--------------------------------------------------------------------------------------//
+
         public void InitializeGame()
         {
             m_Player1.Pieces.Clear();
@@ -65,26 +68,24 @@ namespace Ex02_Othelo
             makeAListOfCurrectMoves();
         }
 
-        //Place the first 4 pieces.
         private void initializeStartPositionOfPiecesOnBoard()
         {
             //Create the 4 coordinate for the starting position pieces.
             Coordinates[] fourInitializeCoordinates = new Coordinates[4];
-            InitializeFourCoordinats(fourInitializeCoordinates);
+            initializeFourCoordinats(fourInitializeCoordinates);
 
             //Create the 4 start position Pieces. 
             Piece[] fourInitializePieces = new Piece[4];
-            InitializeFourPieces(fourInitializePieces, fourInitializeCoordinates);
+            initializeFourPieces(fourInitializePieces, fourInitializeCoordinates);
 
             //Assign the 4 Start Pieces To Players
-            AssignTheFourInitializePiecesToPlayers(fourInitializePieces);
+            assignTheFourInitializePiecesToPlayers(fourInitializePieces);
 
             //Place the 4 stat Pieces on board.
             placeTheFourInitializePiecesOnBoard(fourInitializePieces, fourInitializeCoordinates);
         }
 
-        //
-        private void InitializeFourPieces(Piece[] io_fourInitializePieces,Coordinates[] io_fourInitializeCoordinates)
+        private void initializeFourPieces(Piece[] io_fourInitializePieces,Coordinates[] io_fourInitializeCoordinates)
         {
             io_fourInitializePieces[k_RightUpBlack]   = new Piece(Player.eTeam.Black, io_fourInitializeCoordinates[k_RightUpBlack]);
             io_fourInitializePieces[k_LeftUpWhite]    = new Piece(Player.eTeam.White, io_fourInitializeCoordinates[k_LeftUpWhite]);
@@ -92,8 +93,7 @@ namespace Ex02_Othelo
             io_fourInitializePieces[k_RightDownWhite] = new Piece(Player.eTeam.White, io_fourInitializeCoordinates[k_RightDownWhite]);
         }
 
-        //
-        private void InitializeFourCoordinats(Coordinates[] io_fourInitializeCoordinate)
+        private void initializeFourCoordinats(Coordinates[] io_fourInitializeCoordinate)
         {
             //Find the middle of the board, to calculate the location for the first 4 pieces.
             byte middleRow = (byte)((s_GamePanel.r_Size / 2) - 1);
@@ -105,8 +105,7 @@ namespace Ex02_Othelo
             io_fourInitializeCoordinate[k_RightDownWhite] = new Coordinates((byte)(middleRow + 1), (byte)(middleColumn + 1));
         }
 
-        //
-        private void AssignTheFourInitializePiecesToPlayers(Piece[] i_fourInitializePiece)
+        private void assignTheFourInitializePiecesToPlayers(Piece[] i_fourInitializePiece)
         {
             m_Player1.AddPiece(i_fourInitializePiece[k_RightUpBlack]);
             m_Player2.AddPiece(i_fourInitializePiece[k_LeftUpWhite]);
@@ -114,7 +113,6 @@ namespace Ex02_Othelo
             m_Player2.AddPiece(i_fourInitializePiece[k_RightDownWhite]);
         }
 
-        //
         private void placeTheFourInitializePiecesOnBoard(Piece[] i_fourInitializePieces, Coordinates[] i_fourInitializeCoordinates)
         {
             s_GamePanel[i_fourInitializeCoordinates[k_RightUpBlack]] = i_fourInitializePieces[k_RightUpBlack];
@@ -147,11 +145,9 @@ namespace Ex02_Othelo
             }
         }
 
-
         //--------------------------------------------------------------------------------------//
-        //                                   Movment Function                                   //
+        //        Make list of currect movment and Sequence lists for change team pieces        //
         //--------------------------------------------------------------------------------------//
-
 
         private void makeAListOfCurrectMoves()
         {
@@ -159,9 +155,9 @@ namespace Ex02_Othelo
 
             List<Piece> allThePiecesFormCurrentPlayer = GetCurrentPlayer().Pieces;
 
-            foreach (Piece currentPiece in allThePiecesFormCurrentPlayer)
+            foreach (Piece currentPieceOnPlayerList in allThePiecesFormCurrentPlayer)
             {
-                Coordinates currentPieceCoordinate = currentPiece.CoordinatesOnBoard;
+                Coordinates currentPieceCoordinate = currentPieceOnPlayerList.CoordinatesOnBoard;
 
                 for (eMoveDirection currentDirection = eMoveDirection.TopRightDirection; (byte)currentDirection < k_NumOfDirections; currentDirection++)
                 {
@@ -173,16 +169,14 @@ namespace Ex02_Othelo
                     {
                         Piece currentRivalPiece = s_GamePanel[currentCoordinate];
                         currentListOfsequencePieces.Add(currentRivalPiece);
-
                         currentCoordinate = getCellCoordinateToProcced(currentCoordinate, currentDirection);
 
                         if (checkIfArriveToEmptyCellOnBoard(currentCoordinate))
                         {
-                            saveTheSequenceList(ref currentListOfsequencePieces, currentCoordinate);
+                            saveTheSequenceListToChangeTeamPiecesMember(ref currentListOfsequencePieces, currentCoordinate);
                             GetCurrentPlayer().IsHaveValidMove = true;
                             currentListOfsequencePieces.Clear();
                         }
-
                         else if (isCurrentCoordinateContainAllyPiece(currentCoordinate)) 
                         {
                             currentListOfsequencePieces.Clear();
@@ -205,14 +199,14 @@ namespace Ex02_Othelo
             return s_GamePanel.DoesCellExist(i_CurrentCoordinate) && s_GamePanel[i_CurrentCoordinate] == null;
         }
 
-        private void saveTheSequenceList(ref List<Piece> i_CurrentListOfsequencePieces, Coordinates i_CurrentCoordinate)
+        private void saveTheSequenceListToChangeTeamPiecesMember(ref List<Piece> io_CurrentListOfsequencePieces, Coordinates i_CurrentCoordinate)
         {
-            foreach (Piece RivalPiece in i_CurrentListOfsequencePieces)
+            foreach (Piece RivalPiece in io_CurrentListOfsequencePieces)
             {
                 m_ChangeTeamPieces[i_CurrentCoordinate.X,i_CurrentCoordinate.Y].Add(RivalPiece);
             }
         }
-
+        
         private Coordinates getCellCoordinateToProcced(Coordinates i_CurrentCoordinate, eMoveDirection i_CurrentDirection)
         {
             Coordinates nextCoordinateInDirection = new Coordinates();
@@ -292,7 +286,7 @@ namespace Ex02_Othelo
             return PieceOnCoordinate.r_Team != s_Turn;
         }
 
-        //-------------------   Move Coordinate to each Direction function   -------------------
+        //-------------------   Move Coordinate to each Direction function   -------------------//
 
         private void moveCoordinateTopRightDirection(ref Coordinates io_NextCoordinateInDirection, Coordinates i_CurrentCoordinate)
         {
@@ -342,33 +336,15 @@ namespace Ex02_Othelo
             io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y + 1);
         }
 
-        //---- do we use this method ----??
-        public List<Piece> this[Coordinates i_Cell]
-        {
-            // This indexer returns the piece in the index of the given coordinate.
-            get
-            {
-                return m_ChangeTeamPieces[i_Cell.X,i_Cell.Y];
-            }
+        //--------------------------------------------------------------------------------------//
+        //                                  Public Methods                                      //
+        //--------------------------------------------------------------------------------------//
 
-            // This indexer enter the given piece at the place of the board that the coordinate represent.
-            set
-            {
-                m_ChangeTeamPieces[i_Cell.X,i_Cell.Y] = value;
-            }
-        }
-
-        //-----------------------------------------------------------------------------------------
-
-
-
-        //
         public Player GetCurrentPlayer()
         {
             return s_Turn == m_Player1.r_Team ? m_Player1 : m_Player2;
         }
 
-        //
         public GamePanel GamePanel
         {
             get
@@ -377,7 +353,6 @@ namespace Ex02_Othelo
             }
         }
 
-        //
         public Player Winner
         {
             get
@@ -391,7 +366,6 @@ namespace Ex02_Othelo
             }
         }
 
-        //
         public Player Player1
         {
             get
@@ -400,7 +374,6 @@ namespace Ex02_Othelo
             }
         }
 
-        //
         public Player Player2
         {
             get
@@ -409,10 +382,8 @@ namespace Ex02_Othelo
             }
         }
  
-        //
         public void UpdatePlayerScore()
         {
-
             GetOpposingPlayer().Score = GetOpposingPlayer().Pieces.Count;
             GetCurrentPlayer().Score = GetCurrentPlayer().Pieces.Count;
 
@@ -424,7 +395,6 @@ namespace Ex02_Othelo
             {
                 Winner = GetCurrentPlayer();
             }
-
         }
 
         public void SetComputerPiece()
@@ -436,9 +406,42 @@ namespace Ex02_Othelo
 
             if (maxPiecesToFlip != 0) 
             {
-                setInputPiece(maxPiecesToFlipCoordinate);
+                SetInputPieceAndFlipAllTheInfluencedPieces(maxPiecesToFlipCoordinate);
+            }
+        }
+
+        public void SetInputPieceAndFlipAllTheInfluencedPieces(Coordinates i_InputCoordinate)
+        {
+            Piece newPiece = new Piece(s_Turn, i_InputCoordinate);
+            s_GamePanel[i_InputCoordinate] = newPiece;
+
+            GetCurrentPlayer().AddPiece(s_GamePanel[i_InputCoordinate]);
+            
+            foreach (Piece currentPieceToFlip in m_ChangeTeamPieces[i_InputCoordinate.X, i_InputCoordinate.Y])
+            {
+                currentPieceToFlip.ChangePieceTeam();
+                GetCurrentPlayer().AddPiece(currentPieceToFlip);
+                GetOpposingPlayer().RemovePiece(currentPieceToFlip);
             }
 
+            ChangeTurn();
+        }
+
+        public bool IsValidPlaceToChoose(Coordinates i_InputCoordinate)
+        {
+            return (m_ChangeTeamPieces[i_InputCoordinate.X, i_InputCoordinate.Y].Count != 0);
+        }        
+ 
+        public void ChangeTurn()
+        {
+            s_Turn = s_Turn == Player.eTeam.Black ? Player.eTeam.White : Player.eTeam.Black;
+            clearListOfCurrectMoves();
+            makeAListOfCurrectMoves();
+        }
+
+        public Player GetOpposingPlayer()
+        {
+            return s_Turn == m_Player1.r_Team ? m_Player2 : m_Player1;
         }
 
         private Coordinates getMaxPiecesToFlipCoordinate(out int o_MaxPiecesToFlip)
@@ -453,7 +456,6 @@ namespace Ex02_Othelo
                 {
                     if (m_ChangeTeamPieces[i, j].Count > o_MaxPiecesToFlip)
                     {
-                        
                         o_MaxPiecesToFlip = m_ChangeTeamPieces[i, j].Count;
                         maxPiecesToFlipCoordinate = new Coordinates(i, j);
                         maxListPiecesToFlipCoordinate.Add(maxPiecesToFlipCoordinate);
@@ -466,52 +468,6 @@ namespace Ex02_Othelo
 
             return maxListPiecesToFlipCoordinate[randomMaxCoordinateLocation];
         }
-
-        public void setInputPiece(Coordinates i_Coordinate)
-        {
-
-            Piece newPiece = new Piece(s_Turn, i_Coordinate);
-            s_GamePanel[i_Coordinate] = newPiece;
-
-            GetCurrentPlayer().AddPiece(s_GamePanel[i_Coordinate]);
-            
-            foreach (Piece currentPieceToFlip in m_ChangeTeamPieces[i_Coordinate.X,i_Coordinate.Y])
-            {
-                currentPieceToFlip.changePieceTeam();
-                GetCurrentPlayer().AddPiece(currentPieceToFlip);
-                GetOpposingPlayer().RemovePiece(currentPieceToFlip);
-            }
-
-            ChangeTurn();
-        }
-
-        public bool setPlaceValidation(Coordinates i_CurrentCoordinate)
-        {
-            return (m_ChangeTeamPieces[i_CurrentCoordinate.X, i_CurrentCoordinate.Y].Count != 0);
-        }        
-
-        //
-        public void ChangeTurn()
-        {
-            s_Turn = s_Turn == Player.eTeam.Black ? Player.eTeam.White : Player.eTeam.Black;
-            clearListOfCurrectMoves();
-            makeAListOfCurrectMoves();
-            
-        }
-
-        //
-        public Player GetOpposingPlayer()
-        {
-            return s_Turn == m_Player1.r_Team ? m_Player2 : m_Player1;
-        }
-
-        public void changeRivalPiece(Coordinates i_Coordinate)
-        {
-            foreach (Piece pieceToChange in m_ChangeTeamPieces[i_Coordinate.X, i_Coordinate.Y])
-            {
-                s_GamePanel[i_Coordinate].changePieceTeam();
-            }
-        }
-
     }
 }
+

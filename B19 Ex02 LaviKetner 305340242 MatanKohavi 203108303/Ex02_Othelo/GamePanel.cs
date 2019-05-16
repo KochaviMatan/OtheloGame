@@ -9,7 +9,7 @@ namespace Ex02_Othelo
         //--------------------------------------------------------------------------------------//
 
         private const char k_FirstLetterOfHeader      = 'A';
-        private const byte k_NumOfSpacesBetwenColumns = 3;
+        private const byte k_NumberOfSpacesBetwenColumns = 3;
         private const char k_RowsBufferSymbol         = '=';
         private const char k_ColumnsBufferSymbol      = '|';
         private const byte k_BufferLength             = 4;
@@ -30,7 +30,6 @@ namespace Ex02_Othelo
         //                                     Set & Get                                        //
         //--------------------------------------------------------------------------------------//
 
-        //
         public Piece this[Coordinates i_Cell]
         {
             // This indexer returns the piece in the index of the given coordinate.
@@ -50,22 +49,18 @@ namespace Ex02_Othelo
         //                                   Build Board                                        //
         //--------------------------------------------------------------------------------------//
 
-        //
         public bool DoesCellExist (Coordinates i_Cell)
         {
             return i_Cell.X >= 0 && i_Cell.X <= (byte)(r_Size -1) && i_Cell.Y >= 0 && i_Cell.Y <= (byte)(r_Size - 1);
         }
 
-        //
         public bool DoesCellOccupied(Coordinates i_Cell)
         {
             return m_Board[i_Cell.X, i_Cell.Y] != null;
         }
 
-        //
         public string GetBoardPanelAsString()
         {
-            //
             char currentRowHeader = '1';   
             string emptyCellString = buildEmptyCellString();             
             string endOfRowString = buildEndOfRowString();               
@@ -100,22 +95,19 @@ namespace Ex02_Othelo
             return boardString.ToString();
         }
 
-        //
         private string buildEmptyCellString()
         {
-            string sequenceOfSpaces = new string(' ', k_NumOfSpacesBetwenColumns);
+            string sequenceOfSpaces = new string(' ', k_NumberOfSpacesBetwenColumns);
             string emptyCellString = string.Format("{0}{1}", k_ColumnsBufferSymbol, sequenceOfSpaces);
             return emptyCellString;
         }
 
-        //
         private string buildEndOfRowString()
         {
             string endOfRowString = string.Format("{0}{1}{2}", k_ColumnsBufferSymbol, System.Environment.NewLine, buildSequenceOfBufferSymbol());
             return endOfRowString;
         }
 
-        //
         private string buildSequenceOfBufferSymbol()
         {
             string sequenceOfSymbol = new string(k_RowsBufferSymbol, (k_BufferLength * r_Size) + 1);
@@ -123,11 +115,10 @@ namespace Ex02_Othelo
             return bufferRowStringSymbol;
         }
 
-        //
         private string buildBoardHeaderString()
         {
             char currentLetter = k_FirstLetterOfHeader;
-            string sequenceOfSpaces = new string(' ', k_NumOfSpacesBetwenColumns);
+            string sequenceOfSpaces = new string(' ', k_NumberOfSpacesBetwenColumns);
 
             StringBuilder boardHeaderString = new StringBuilder(sequenceOfSpaces);
 
@@ -143,7 +134,7 @@ namespace Ex02_Othelo
             return string.Format("{0}{1}{2}", boardHeaderString, buildSequenceOfBufferSymbol(), System.Environment.NewLine);
         }
 
-        public void clearBoard()
+        public void ClearBoard()
         {
             for (byte row = 0; row < r_Size; row++)
             {

@@ -10,7 +10,6 @@ namespace Ex02_Othelo
         }
 
         public readonly eTeam r_Team;
-        private int k_NameLength = 2;
         private string m_Name = null;
         private int m_Score = 0;
         private bool m_PlayerIsComputer = false;
@@ -26,9 +25,9 @@ namespace Ex02_Othelo
             List<Piece> m_Pieces = new List<Piece>();
         }
 
-        ////-------------------------------------------------------------------------------
-        //                                 Properties
-        ////-------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------//
+        //                                Get & Set                                      //
+        //-------------------------------------------------------------------------------//
 
         public int Score
         {
@@ -56,8 +55,6 @@ namespace Ex02_Othelo
             }
         }
 
-        ////-----------------------------Can only be return----------------------------------
-
         public bool IsPlayerIsComputer
         {
             get
@@ -82,26 +79,17 @@ namespace Ex02_Othelo
             }
         }
 
-        // -------------------------------------------------------------------------------
-        //                           Player's tool functions
-        // -------------------------------------------------------------------------------
+        // -----------------------------------------------------------------------------//
+        //                           Player Public functions                            //
+        // -----------------------------------------------------------------------------//
 
-        // This function return the number of pieces that the player have.
-        public int GetNumberOfPieces()
-        {
-            return m_Pieces.Count;
-        }
-
-        // This function receive piece and add him to the player pieces
         public void AddPiece(Piece i_Piece)
         {
             m_Pieces.Add(i_Piece);
         }
 
-        // This function receive piece that need to remove from the player pieces and remove it
         public void RemovePiece(Piece i_Piece)
         {
-            // Verfiy that the array of pieces not empty from pieces
             if (m_Pieces.Count != 0)
             {
                 m_Pieces.Remove(i_Piece);

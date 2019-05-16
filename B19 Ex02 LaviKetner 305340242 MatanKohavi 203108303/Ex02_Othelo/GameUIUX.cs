@@ -64,7 +64,6 @@ namespace Ex02_Othelo
             byte boardSize = getValidBoardSizeFromUser();
             eGameMode gameMode = getValidGameMode();
 
-            // Check if Player1 play agains the computer 
             if (gameMode == eGameMode.AgainstComputer)
             {
                 player2Name = k_ComputerName;
@@ -104,7 +103,7 @@ namespace Ex02_Othelo
         //
         private void doComputerMove()
         {
-            if (m_OtheloGameManager.GetCurrentPlayer().IsHaveValidMove) //(m_OtheloGameManager.isMoreMovesAvaible()) 
+            if (m_OtheloGameManager.GetCurrentPlayer().IsHaveValidMove) 
             {
                 makeADelay();
                 m_OtheloGameManager.SetComputerPiece();
@@ -118,17 +117,16 @@ namespace Ex02_Othelo
                 }
                 else
                 {
-                    printErrorMsgForNoValidMove();
+                    printErrorMsgIfNoValidMove();
                     m_OtheloGameManager.ChangeTurn();
                 }
             }           
         }
 
-
         //
         private void doAMoveOrQuit()
         {
-            if (m_OtheloGameManager.GetCurrentPlayer().IsHaveValidMove) //(m_OtheloGameManager.isMoreMovesAvaible()) 
+            if (m_OtheloGameManager.GetCurrentPlayer().IsHaveValidMove)
             {
                 if (!getValidActionFromThePlayer())
                 {
@@ -137,7 +135,6 @@ namespace Ex02_Othelo
                 else
                 {
                     endGame();
-
                 }
             }
             else
@@ -148,21 +145,18 @@ namespace Ex02_Othelo
                 }
                 else
                 {
-                    printErrorMsgForNoValidMove();
+                    printErrorMsgIfNoValidMove();
                     m_OtheloGameManager.ChangeTurn();
                 }
             }                                      
         }
 
-
-        //
         private void doPlayerMove(Coordinates i_Coordinate)
         {
-            m_OtheloGameManager.setInputPiece(i_Coordinate);
+            m_OtheloGameManager.SetInputPieceAndFlipAllTheInfluencedPieces(i_Coordinate);
             clearScreenAndPrintGamePanel();
         }
 
-        //
         private void currentGameRoundIsOver()
         {
             Screen.Clear();
@@ -172,7 +166,6 @@ namespace Ex02_Othelo
             askToContinueAndActInAccordance();
         }
 
-        //
         private void askToContinueAndActInAccordance()
         {
             string toContinueAnswer;
@@ -184,14 +177,12 @@ namespace Ex02_Othelo
             }
             else
             {
-                m_OtheloGameManager.GamePanel.clearBoard();
+                m_OtheloGameManager.GamePanel.ClearBoard();
                 m_OtheloGameManager.InitializeGame();
                 clearScreenAndPrintGamePanel();
             }
         }
                 
-
-        //
         private void convertStrToMove(string i_ValidStringInput)
         {
             byte xCoordinate = (byte)(i_ValidStringInput[1] - '1'); 
@@ -200,30 +191,14 @@ namespace Ex02_Othelo
             m_CoordinateInput = new Coordinates(xCoordinate, yCoordinate);
         }
 
-
         //--------------------------------------------------------------------------------------//
         //                               update board                                           //
         //--------------------------------------------------------------------------------------//
 
-        //
         private void clearScreenAndPrintGamePanel()
         {
             Screen.Clear();
             Console.WriteLine(m_OtheloGameManager.GamePanel.GetBoardPanelAsString());
-        }
-
-        //
-        private void printPreviousTurnMoveMsg(string i_TheMove)
-        {
-            Player PreviousPlayer = m_OtheloGameManager.GetOpposingPlayer();
-            Console.WriteLine("{0}'s move was ({1}) : {2}", PreviousPlayer.Name, (char)PreviousPlayer.r_Team, i_TheMove);
-        }
-
-        //
-        private void printCurrentPreviousTuenMoveOfCurrentPlayerMsg(string i_TheMove)
-        {
-            Player CurrentPlayer = m_OtheloGameManager.GetCurrentPlayer();
-            Console.WriteLine("{0}'s move was ({1}) : {2}", CurrentPlayer.Name, (char)CurrentPlayer.r_Team, i_TheMove);
         }
 
         //--------------------------------------------------------------------------------------//
@@ -240,10 +215,10 @@ namespace Ex02_Othelo
         //
         private void printWinnerOrDrawMsg()
         {
-            // If The winner is null it means that we have a draw:
+            // If The winner is null it means that we have a Tie:
             if (m_OtheloGameManager.Winner == null)
             {
-                Console.WriteLine("Draw");
+                Console.WriteLine("We have a Tie!");
             }
             else
             {
@@ -261,7 +236,7 @@ namespace Ex02_Othelo
         //
         private void printGameOverMsg()
         {
-            Console.WriteLine("Game Over");
+            Console.WriteLine("Game Over!");
         }
 
         //
@@ -338,7 +313,7 @@ namespace Ex02_Othelo
 
             while (!isValidAnswer(answer))
             {
-                printErrorMsgForGettingInvalidAsnwer();
+                printErrorMsgIfGettingInvalidAsnwer();
                 askToContinue();
                 answer = Console.ReadLine();
             }
@@ -349,19 +324,31 @@ namespace Ex02_Othelo
         //
         public bool getValidActionFromThePlayer()
         {
-            
             bool isQuitInput = false; 
             printPlayersTurnMsg();
             string playerAction = Console.ReadLine();
 
             while (!isValidSyntexAndAction(playerAction, ref isQuitInput))
             {
-                printErrorMsgForGettingInvalidAction();
+                printErrorMsgIfGettingInvalidAction();
                 printPlayersTurnMsg();
                 playerAction = Console.ReadLine();
             }
           
             return isQuitInput;
+        }
+
+        private void endGame()
+        {
+            Screen.Clear();
+            System.Console.Write("The User entered a quit request. Game is closing. BYE BYE");
+            makeADelay();
+            Environment.Exit(0);
+        }
+
+        private void makeADelay()
+        {
+            System.Threading.Thread.Sleep((int)System.TimeSpan.FromSeconds(1.5).TotalMilliseconds);
         }
 
         //--------------------------------------------------------------------------------------//
@@ -418,17 +405,23 @@ namespace Ex02_Othelo
 
             if (i_StringInput.Length == k_MoveStrLength)
             {
-                if (((i_StringInput[0]) >= 'A' && (i_StringInput[0]) <= 'A' + (m_OtheloGameManager.GamePanel.r_Size)) && (i_StringInput[1] >= '0' && i_StringInput[1] <= '0' + (m_OtheloGameManager.GamePanel.r_Size)))
+                if (checkValidInputSyntex(i_StringInput))
                 {
                     isValidInput = true;
                     convertStrToMove(i_StringInput);
-                    isValidInput = m_OtheloGameManager.setPlaceValidation(m_CoordinateInput);
+                    isValidInput = m_OtheloGameManager.IsValidPlaceToChoose(m_CoordinateInput);
                 }
             }
 
             return (io_IsQuitInput || isValidInput);
         }
 
+        //
+        private bool checkValidInputSyntex(string i_StringInput)
+        {
+            return ((i_StringInput[0]) >= 'A' && (i_StringInput[0]) <= 'A' + (m_OtheloGameManager.GamePanel.r_Size)) && (i_StringInput[1] >= '0' && i_StringInput[1] <= '0' + (m_OtheloGameManager.GamePanel.r_Size));
+        }
+        
         //
         private bool isQuitSyntex(string i_StringInput)
         {
@@ -439,7 +432,7 @@ namespace Ex02_Othelo
         //                                  Error Messages                                      //
         //--------------------------------------------------------------------------------------//
 
-        // This function print error message due to receiving invalid name.
+        // This function print error message if receiving an invalid name.
         private void printErrorMsgForGettingInvalidName(byte i_Player)
         {
             Console.WriteLine("Error! Invalid input:");
@@ -447,46 +440,35 @@ namespace Ex02_Othelo
             Console.WriteLine("Player{0} Please RE-Enter your name: ", i_Player);
         }
 
-        // This function print error message due to receiving invalid board size.
+        // This function print error message if receiving invalid an board size.
         private void printErrorMsgForGettingInvalidBoardSize()
         {
-            Console.WriteLine("Error! Invalid input: the board size invalid...");
+            Console.WriteLine("Error! Invalid input: the board size invalid.");
         }
 
-        // This function print error message due to receiving invalid game mode.
+        // This function print error message if receiving an invalid game mode.
         private void printErrorMsgForGettingInvalidGameMode()
         {
-            Console.WriteLine("Error! Invalid input: the mode you enter does not exist...");
+            Console.WriteLine("Error! Invalid input: the mode you enter does not exist.");
         }
 
-        // This function print error message due to invalid answer.
-        private void printErrorMsgForGettingInvalidAsnwer()
+        // This function print error message if receiving an invalid answer.
+        private void printErrorMsgIfGettingInvalidAsnwer()
         {
             Console.WriteLine("Error! Invalid input: this answer not valid...");
         }
 
-        // This function print error message due to invalid action.
-        private void printErrorMsgForGettingInvalidAction()
+        // This function print error message if receiving an invalid action.
+        private void printErrorMsgIfGettingInvalidAction()
         {
-            Console.WriteLine("Error! Invalid input: the action you try to do is not valid...");
+            Console.WriteLine("Error! Invalid input: the action you try to do is not valid.");
         }
 
-        private void printErrorMsgForNoValidMove()
+        // This function print error message if No valid move to player.
+        private void printErrorMsgIfNoValidMove()
         {
             Console.WriteLine("{0} doesnt have valid move. The turn goes to {1}", m_OtheloGameManager.GetCurrentPlayer(), m_OtheloGameManager.GetOpposingPlayer());
         }
 
-        private void endGame()
-        {
-            Screen.Clear();
-            System.Console.Write("The User entered a quit request. Game is closing. BYE BYE");
-            makeADelay();
-            Environment.Exit(0);
-        }
-
-        private void makeADelay()
-        {
-            System.Threading.Thread.Sleep((int)System.TimeSpan.FromSeconds(1.5).TotalMilliseconds);
-        }
     }
 }

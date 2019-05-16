@@ -6,7 +6,6 @@ namespace Ex02_Othelo
         public Player.eTeam r_Team;
         private Coordinates m_CoordinatesOnBoard;
 
-
         // Piece Constructor
         public Piece(Player.eTeam i_Team, Coordinates i_Coordinates)
         {
@@ -14,10 +13,9 @@ namespace Ex02_Othelo
             m_CoordinatesOnBoard = i_Coordinates;
         }
 
-
-        ////-------------------------------------------------------------------------------
-        //                                 Properties
-        ////-------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------//
+        //                                 Get & Set
+        //-------------------------------------------------------------------------------//
 
         public Player.eTeam Team
         {
@@ -44,9 +42,6 @@ namespace Ex02_Othelo
                 m_CoordinatesOnBoard = value;
             }
         }
-        ////-------------------------------------------------------------------------------
-        //                                 Other functions
-        ////-------------------------------------------------------------------------------
 
         public Player.eTeam Symbol
         {
@@ -56,10 +51,13 @@ namespace Ex02_Othelo
             }
         }
 
-        public void changePieceTeam()
+        //-------------------------------------------------------------------------------//
+        //                                 Other functions                               //
+        //-------------------------------------------------------------------------------//
+
+        public void ChangePieceTeam()
         {
            r_Team = r_Team == Player.eTeam.Black ? Player.eTeam.White : Player.eTeam.Black;
         }
-
     }
 }
