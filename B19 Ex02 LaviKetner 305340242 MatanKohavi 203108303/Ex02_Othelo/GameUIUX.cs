@@ -202,7 +202,7 @@ namespace Ex02_Othelo
         }
 
         //--------------------------------------------------------------------------------------//
-        //                           printiong messeges to user                                 //
+        //                           printing messeges to user                                 //
         //--------------------------------------------------------------------------------------//
 
         //
@@ -467,7 +467,8 @@ namespace Ex02_Othelo
         // This function print error message if No valid move to player.
         private void printErrorMsgIfNoValidMove()
         {
-            Console.WriteLine("{0} doesnt have valid move. The turn goes to {1}", m_OtheloGameManager.GetCurrentPlayer(), m_OtheloGameManager.GetOpposingPlayer());
+            makeADelay();
+            Console.WriteLine("{0} doesnt have valid move. The turn goes to {1}", m_OtheloGameManager.GetCurrentPlayer().Name, m_OtheloGameManager.GetOpposingPlayer().Name);
         }
 
     }
