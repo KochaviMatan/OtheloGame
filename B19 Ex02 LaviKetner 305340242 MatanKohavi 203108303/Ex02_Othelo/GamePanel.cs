@@ -1,13 +1,12 @@
 ﻿using System.Text;
+
 namespace Ex02_Othelo
 {
-    class GamePanel
+    public class GamePanel
     {
-
         //--------------------------------------------------------------------------------------//
         //                                     Conts                                            //
         //--------------------------------------------------------------------------------------//
-
         private const char k_FirstLetterOfHeader      = 'A';
         private const byte k_NumberOfSpacesBetwenColumns = 3;
         private const char k_RowsBufferSymbol         = '=';
@@ -17,9 +16,9 @@ namespace Ex02_Othelo
         //--------------------------------------------------------------------------------------//
         //                                   Data Members                                       //
         //--------------------------------------------------------------------------------------//
-
-        public readonly byte r_Size;
+        private readonly byte r_Size;
         private Piece[,] m_Board;
+
         public GamePanel(byte i_Size)
         {
             r_Size = i_Size;
@@ -29,29 +28,33 @@ namespace Ex02_Othelo
         //--------------------------------------------------------------------------------------//
         //                                     Indexers                                         //
         //--------------------------------------------------------------------------------------//
-
         public Piece this[Coordinates i_Cell]
         {
-            // This indexer returns the piece in the index of the given coordinate.
             get
             {
                 return m_Board[i_Cell.X, i_Cell.Y];
             }
 
-            // This indexer enter the given piece at the place of the board that the coordinate represent.
             set
             {
                 m_Board[i_Cell.X, i_Cell.Y] = value;
             }
         }
 
+        public byte Size
+        {
+            get
+            {
+                return r_Size;
+            }
+        }
+
         //--------------------------------------------------------------------------------------//
         //                                   Build Board                                        //
         //--------------------------------------------------------------------------------------//
-
-        public bool DoesCellExist (Coordinates i_Cell)
+        public bool DoesCellExist(Coordinates i_Cell)
         {
-            return i_Cell.X >= 0 && i_Cell.X <= (byte)(r_Size -1) && i_Cell.Y >= 0 && i_Cell.Y <= (byte)(r_Size - 1);
+            return i_Cell.X >= 0 && i_Cell.X <= (byte)(r_Size - 1) && i_Cell.Y >= 0 && i_Cell.Y <= (byte)(r_Size - 1);
         }
 
         public bool DoesCellOccupied(Coordinates i_Cell)
@@ -66,13 +69,10 @@ namespace Ex02_Othelo
             string endOfRowString = buildEndOfRowString();               
             StringBuilder boardString = new StringBuilder(buildBoardHeaderString());
 
-            // Bulid the board that will be drawn:
-            for (byte row = 0; row <r_Size; row++)
+            for (byte row = 0; row < r_Size; row++)
             {
-                // Open row with row header:
                 boardString.Append(currentRowHeader.ToString());
 
-                // Build the rest of the board:
                 for (byte column = 0; column < r_Size; column++)
                 {
                     if (m_Board[row, column] == null)
@@ -90,7 +90,6 @@ namespace Ex02_Othelo
                 currentRowHeader++;
             }
 
-            // Remove the last surplus line in string:
             boardString.Remove(boardString.Length - 1, "\n".Length);
             return boardString.ToString();
         }
@@ -144,6 +143,5 @@ namespace Ex02_Othelo
                 }
             }
         }
-
     }
 }

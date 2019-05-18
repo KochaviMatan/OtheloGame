@@ -1,5 +1,4 @@
-﻿
-namespace Ex02_Othelo
+﻿namespace Ex02_Othelo
 {
     public struct Coordinates
     {
@@ -16,7 +15,6 @@ namespace Ex02_Othelo
         //-------------------------------------------------------------------------------//
         //                                 Properties                                    //
         //-------------------------------------------------------------------------------//
-
         public byte Y
         {
             get

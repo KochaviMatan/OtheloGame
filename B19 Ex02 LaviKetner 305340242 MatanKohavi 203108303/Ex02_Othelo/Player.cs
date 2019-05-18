@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 namespace Ex02_Othelo
 {
     public class Player
@@ -9,7 +10,7 @@ namespace Ex02_Othelo
             Black = 'X',
         }
 
-        public readonly eTeam r_Team;
+        private readonly eTeam r_Team;
         private string m_Name = null;
         private int m_Score = 0;
         private bool m_PlayerIsComputer = false;
@@ -28,7 +29,6 @@ namespace Ex02_Othelo
         //-------------------------------------------------------------------------------//
         //                                Properties                                     //
         //-------------------------------------------------------------------------------//
-
         public int Score
         {
             get
@@ -39,6 +39,14 @@ namespace Ex02_Othelo
             set
             {
                 m_Score = value;
+            }
+        }
+
+        public eTeam Team
+        {
+            get
+            {
+                return r_Team;
             }
         }
 
@@ -82,7 +90,6 @@ namespace Ex02_Othelo
         // -----------------------------------------------------------------------------//
         //                           Player Public functions                            //
         // -----------------------------------------------------------------------------//
-
         public void AddPiece(Piece i_Piece)
         {
             m_Pieces.Add(i_Piece);

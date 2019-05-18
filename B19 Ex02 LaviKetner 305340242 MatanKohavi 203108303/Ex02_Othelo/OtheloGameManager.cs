@@ -2,18 +2,16 @@
 
 namespace Ex02_Othelo
 {
-    class OtheloGameManager
+    public class OtheloGameManager
     {
         //--------------------------------------------------------------------------------------//
         //                                   Conts & Enum                                       //
         //--------------------------------------------------------------------------------------//
-
-        const byte k_RightUpBlack   = 0,
-                   k_LeftUpWhite    = 1,
-                   k_LeftDownBlack  = 2,
-                   k_RightDownWhite = 3;
-
-        const byte k_NumOfDirections = 8;
+        private const byte k_RightUpBlack = 0,
+                           k_LeftUpWhite = 1,
+                           k_LeftDownBlack = 2,
+                           k_RightDownWhite = 3,
+                           k_NumOfDirections = 8;
 
         private enum eMoveDirection
         {
@@ -30,20 +28,16 @@ namespace Ex02_Othelo
         //--------------------------------------------------------------------------------------//
         //                                   Data Members                                       //
         //--------------------------------------------------------------------------------------//
-
-        private static GamePanel        s_GamePanel;
-        private Player                  m_Player1;
-        private Player                  m_Player2;
-        private static Player.eTeam     s_Turn             = Player.eTeam.Black;
-        private Player                  m_Winner           = null;
-        private List<Piece>[,]          m_ChangeTeamPieces;
-
+        private static GamePanel s_GamePanel;
+        private Player m_Player1;
+        private Player m_Player2;
+        private static Player.eTeam s_Turn = Player.eTeam.Black;
+        private Player m_Winner = null;
+        private List<Piece>[,] m_ChangeTeamPieces;
 
         //--------------------------------------------------------------------------------------//
         //                                  Run Game                                            //
         //--------------------------------------------------------------------------------------//
-
-        // OtheloGameManager Constructor
         public OtheloGameManager(byte i_BoardSize, string i_Player1Name, string i_Player2Name, bool i_IsPlayer2IsComputer)
         {
             const bool v_Player1IsAlwaysNotComputer = false;
@@ -57,7 +51,6 @@ namespace Ex02_Othelo
         //--------------------------------------------------------------------------------------//
         //                              Initialize Function                                     //
         //--------------------------------------------------------------------------------------//
-
         public void InitializeGame()
         {
             m_Player1.Pieces.Clear();
@@ -70,22 +63,18 @@ namespace Ex02_Othelo
 
         private void initializeStartPositionOfPiecesOnBoard()
         {
-            //Create the 4 coordinate for the starting position pieces.
             Coordinates[] fourInitializeCoordinates = new Coordinates[4];
             initializeFourCoordinats(fourInitializeCoordinates);
 
-            //Create the 4 start position Pieces. 
             Piece[] fourInitializePieces = new Piece[4];
             initializeFourPieces(fourInitializePieces, fourInitializeCoordinates);
 
-            //Assign the 4 Start Pieces To Players
             assignTheFourInitializePiecesToPlayers(fourInitializePieces);
 
-            //Place the 4 stat Pieces on board.
             placeTheFourInitializePiecesOnBoard(fourInitializePieces, fourInitializeCoordinates);
         }
 
-        private void initializeFourPieces(Piece[] io_fourInitializePieces,Coordinates[] io_fourInitializeCoordinates)
+        private void initializeFourPieces(Piece[] io_fourInitializePieces, Coordinates[] io_fourInitializeCoordinates)
         {
             io_fourInitializePieces[k_RightUpBlack]   = new Piece(Player.eTeam.Black, io_fourInitializeCoordinates[k_RightUpBlack]);
             io_fourInitializePieces[k_LeftUpWhite]    = new Piece(Player.eTeam.White, io_fourInitializeCoordinates[k_LeftUpWhite]);
@@ -95,13 +84,12 @@ namespace Ex02_Othelo
 
         private void initializeFourCoordinats(Coordinates[] io_fourInitializeCoordinate)
         {
-            //Find the middle of the board, to calculate the location for the first 4 pieces.
-            byte middleRow = (byte)((s_GamePanel.r_Size / 2) - 1);
+            byte middleRow = (byte)((s_GamePanel.Size / 2) - 1);
             byte middleColumn = middleRow;
 
             io_fourInitializeCoordinate[k_RightUpBlack] = new Coordinates(middleRow, (byte)(middleColumn + 1));
             io_fourInitializeCoordinate[k_LeftUpWhite] = new Coordinates(middleRow, middleColumn);
-            io_fourInitializeCoordinate[k_LeftDownBlack] = new Coordinates((byte)(middleRow + 1), (byte)(middleColumn));
+            io_fourInitializeCoordinate[k_LeftDownBlack] = new Coordinates((byte)(middleRow + 1), (byte)middleColumn);
             io_fourInitializeCoordinate[k_RightDownWhite] = new Coordinates((byte)(middleRow + 1), (byte)(middleColumn + 1));
         }
 
@@ -123,11 +111,11 @@ namespace Ex02_Othelo
 
         private void initializeChangeTeamPiecesMember()
         {
-            m_ChangeTeamPieces = new List<Piece>[s_GamePanel.r_Size, s_GamePanel.r_Size];
+            m_ChangeTeamPieces = new List<Piece>[s_GamePanel.Size, s_GamePanel.Size];
 
-            for (int i = 0; i < s_GamePanel.r_Size; i++) 
+            for (int i = 0; i < s_GamePanel.Size; i++) 
             {
-                for (int j = 0; j < s_GamePanel.r_Size; j++) 
+                for (int j = 0; j < s_GamePanel.Size; j++) 
                 {
                     m_ChangeTeamPieces[i, j] = new List<Piece>();
                 }
@@ -136,9 +124,9 @@ namespace Ex02_Othelo
 
         private void clearListOfCurrectMoves()
         {
-            for (int i = 0; i < s_GamePanel.r_Size; i++)
+            for (int i = 0; i < s_GamePanel.Size; i++)
             {
-                for (int j = 0; j < s_GamePanel.r_Size; j++)
+                for (int j = 0; j < s_GamePanel.Size; j++)
                 {
                     m_ChangeTeamPieces[i, j].Clear();
                 }
@@ -148,7 +136,6 @@ namespace Ex02_Othelo
         //--------------------------------------------------------------------------------------//
         //        Make list of currect movment and Sequence lists for change team pieces        //
         //--------------------------------------------------------------------------------------//
-
         private void makeAListOfCurrectMoves()
         {
             GetCurrentPlayer().IsHaveValidMove = false;
@@ -191,7 +178,7 @@ namespace Ex02_Othelo
 
         private bool isCurrentCoordinateContainAllyPiece(Coordinates i_CurrentCoordinate)
         {
-            return s_GamePanel.DoesCellExist(i_CurrentCoordinate) && s_GamePanel[i_CurrentCoordinate].r_Team == s_Turn;
+            return s_GamePanel.DoesCellExist(i_CurrentCoordinate) && s_GamePanel[i_CurrentCoordinate].Team == s_Turn;
         }
 
         private bool checkIfArriveToEmptyCellOnBoard(Coordinates i_CurrentCoordinate)
@@ -203,7 +190,7 @@ namespace Ex02_Othelo
         {
             foreach (Piece RivalPiece in io_CurrentListOfsequencePieces)
             {
-                m_ChangeTeamPieces[i_CurrentCoordinate.X,i_CurrentCoordinate.Y].Add(RivalPiece);
+                m_ChangeTeamPieces[i_CurrentCoordinate.X, i_CurrentCoordinate.Y].Add(RivalPiece);
             }
         }
         
@@ -217,48 +204,56 @@ namespace Ex02_Othelo
                     {
                         moveCoordinateTopRightDirection(ref nextCoordinateInDirection, i_CurrentCoordinate);
                     }
+
                     break;
 
                 case eMoveDirection.TopDirection:
                     {
                         moveCoordinateTopDirection(ref nextCoordinateInDirection, i_CurrentCoordinate);
                     }
+
                     break;
 
                 case eMoveDirection.TopLeftDirection:
                     {
                         moveCoordinateTopLeftDirection(ref nextCoordinateInDirection, i_CurrentCoordinate);
                     }
+
                     break;
 
                 case eMoveDirection.LeftDirection:
                     {
                         moveCoordinateLeftDirection(ref nextCoordinateInDirection, i_CurrentCoordinate);
                     }
+
                     break;
 
                 case eMoveDirection.LeftDownDirection:
                     {
                         moveCoordinateLeftDownDirection(ref nextCoordinateInDirection, i_CurrentCoordinate);
                     }
+
                     break;
 
                 case eMoveDirection.DownDirection:
                     {
                         moveCoordinateDownDirection(ref nextCoordinateInDirection, i_CurrentCoordinate);
                     }
+
                     break;
 
                 case eMoveDirection.RightDownDirection:
                     {
                         moveCoordinateRightDownDirection(ref nextCoordinateInDirection, i_CurrentCoordinate);
                     }
+
                     break;
 
                 case eMoveDirection.RightDirection:
                     {
                         moveCoordinateRightDirection(ref nextCoordinateInDirection, i_CurrentCoordinate);
                     }
+
                     break;
             }
 
@@ -283,10 +278,8 @@ namespace Ex02_Othelo
         private bool doesCellOccupiedByEnemey(Coordinates i_Cell)
         {
             Piece PieceOnCoordinate = s_GamePanel[i_Cell];
-            return PieceOnCoordinate.r_Team != s_Turn;
+            return PieceOnCoordinate.Team != s_Turn;
         }
-
-        //-------------------   Move Coordinate to each Direction function   -------------------//
 
         private void moveCoordinateTopRightDirection(ref Coordinates io_NextCoordinateInDirection, Coordinates i_CurrentCoordinate)
         {
@@ -297,7 +290,7 @@ namespace Ex02_Othelo
         private void moveCoordinateTopDirection(ref Coordinates io_NextCoordinateInDirection, Coordinates i_CurrentCoordinate)
         {
             io_NextCoordinateInDirection.X = (byte)(i_CurrentCoordinate.X - 1);
-            io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y);
+            io_NextCoordinateInDirection.Y = (byte)i_CurrentCoordinate.Y;
         }
 
         private void moveCoordinateTopLeftDirection(ref Coordinates io_NextCoordinateInDirection, Coordinates i_CurrentCoordinate)
@@ -308,7 +301,7 @@ namespace Ex02_Othelo
 
         private void moveCoordinateLeftDirection(ref Coordinates io_NextCoordinateInDirection, Coordinates i_CurrentCoordinate)
         {
-            io_NextCoordinateInDirection.X = (byte)(i_CurrentCoordinate.X);
+            io_NextCoordinateInDirection.X = (byte)i_CurrentCoordinate.X;
             io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y - 1);
         }
 
@@ -321,7 +314,7 @@ namespace Ex02_Othelo
         private void moveCoordinateDownDirection(ref Coordinates io_NextCoordinateInDirection, Coordinates i_CurrentCoordinate)
         {
             io_NextCoordinateInDirection.X = (byte)(i_CurrentCoordinate.X + 1);
-            io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y);
+            io_NextCoordinateInDirection.Y = (byte)i_CurrentCoordinate.Y;
         }
 
         private void moveCoordinateRightDownDirection(ref Coordinates io_NextCoordinateInDirection, Coordinates i_CurrentCoordinate)
@@ -332,17 +325,16 @@ namespace Ex02_Othelo
 
         private void moveCoordinateRightDirection(ref Coordinates io_NextCoordinateInDirection, Coordinates i_CurrentCoordinate)
         {
-            io_NextCoordinateInDirection.X = (byte)(i_CurrentCoordinate.X);
+            io_NextCoordinateInDirection.X = (byte)i_CurrentCoordinate.X;
             io_NextCoordinateInDirection.Y = (byte)(i_CurrentCoordinate.Y + 1);
         }
 
         //--------------------------------------------------------------------------------------//
         //                                   Properties                                         //
         //--------------------------------------------------------------------------------------//
-
         public Player GetCurrentPlayer()
         {
-            return s_Turn == m_Player1.r_Team ? m_Player1 : m_Player2;
+            return s_Turn == m_Player1.Team ? m_Player1 : m_Player2;
         }
 
         public GamePanel GamePanel
@@ -385,7 +377,6 @@ namespace Ex02_Othelo
         //--------------------------------------------------------------------------------------//
         //                                  Public Methods                                      //
         //--------------------------------------------------------------------------------------//
-
         public void UpdatePlayerScore()
         {
             GetOpposingPlayer().Score = GetOpposingPlayer().Pieces.Count;
@@ -433,7 +424,7 @@ namespace Ex02_Othelo
 
         public bool IsValidPlaceToChoose(Coordinates i_InputCoordinate)
         {
-            return (m_ChangeTeamPieces[i_InputCoordinate.X, i_InputCoordinate.Y].Count != 0);
+            return m_ChangeTeamPieces[i_InputCoordinate.X, i_InputCoordinate.Y].Count != 0;
         }        
  
         public void ChangeTurn()
@@ -445,7 +436,7 @@ namespace Ex02_Othelo
 
         public Player GetOpposingPlayer()
         {
-            return s_Turn == m_Player1.r_Team ? m_Player2 : m_Player1;
+            return s_Turn == m_Player1.Team ? m_Player2 : m_Player1;
         }
 
         private Coordinates getMaxPiecesToFlipCoordinate(out int o_MaxPiecesToFlip)
@@ -454,9 +445,9 @@ namespace Ex02_Othelo
             Coordinates maxPiecesToFlipCoordinate = new Coordinates(0, 0);
             List<Coordinates> maxListPiecesToFlipCoordinate = new List<Coordinates>();
 
-            for (byte i = 0; i < s_GamePanel.r_Size; i++)
+            for (byte i = 0; i < s_GamePanel.Size; i++)
             {
-                for (byte j = 0; j < s_GamePanel.r_Size; j++)
+                for (byte j = 0; j < s_GamePanel.Size; j++)
                 {
                     if (m_ChangeTeamPieces[i, j].Count > o_MaxPiecesToFlip)
                     {
@@ -474,4 +465,3 @@ namespace Ex02_Othelo
         }
     }
 }
-

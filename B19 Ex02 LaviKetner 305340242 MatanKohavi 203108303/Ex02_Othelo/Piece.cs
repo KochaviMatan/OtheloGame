@@ -1,9 +1,8 @@
-﻿
-namespace Ex02_Othelo
+﻿namespace Ex02_Othelo
 {
     public class Piece
     {
-        public Player.eTeam r_Team;
+        private Player.eTeam r_Team;
         private Coordinates m_CoordinatesOnBoard;
 
         // Piece Constructor
@@ -16,7 +15,6 @@ namespace Ex02_Othelo
         //-------------------------------------------------------------------------------//
         //                                 Properties                                    //
         //-------------------------------------------------------------------------------//
-
         public Player.eTeam Team
         {
             get
@@ -54,7 +52,6 @@ namespace Ex02_Othelo
         //-------------------------------------------------------------------------------//
         //                                 Other functions                               //
         //-------------------------------------------------------------------------------//
-
         public void ChangePieceTeam()
         {
            r_Team = r_Team == Player.eTeam.Black ? Player.eTeam.White : Player.eTeam.Black;
